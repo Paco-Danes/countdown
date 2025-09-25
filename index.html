@@ -514,12 +514,14 @@
             setTarget(local, true);
         });
 
-        // URL feature removed → disable Share button to avoid confusion
-        if (shareBtn) {
-            shareBtn.disabled = true;
-            shareBtn.title = "Sharing via URL is disabled";
-            shareBtn.addEventListener("click", () => feedback("Sharing is disabled"));
-        }
+        shareBtn.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(location.href);
+                feedback("Link copied ✨");
+            } catch {
+                feedback("Copy failed — you can copy the URL bar");
+            }
+        });
     </script>
 
 </body>
