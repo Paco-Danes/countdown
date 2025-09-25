@@ -440,7 +440,7 @@
             // Priority: ?until=... → localStorage → default (now+7 days)
             return parseQueryTarget()
                 || (localStorage.getItem(LS_TARGET) ? new Date(localStorage.getItem(LS_TARGET)) : null)
-                || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                || new Date("2025-10-24T20:25:00");
         }
 
         function setTarget(dt, setStarted = true) {
@@ -521,8 +521,14 @@
         const initTarget = readInitialTarget();
         input.value = toLocalInputValue(initTarget);
         // Ensure we have a stored target + startedAt
-        if (!localStorage.getItem(LS_TARGET)) setTarget(initTarget, true);
-        if (!localStorage.getItem(LS_STARTED)) localStorage.setItem(LS_STARTED, new Date().toISOString());
+        // Hard-coded "start" of the countdown:
+        const fixedStart = new Date("2025-09-24T17:15:00");
+        
+        // If no target set yet, set it (and set startedAt to the fixed date)
+        if(!localStorage.getItem(LS_TARGET)) setTarget(initTarget, false);
+        
+        // Always enforce the same starting point
+        localStorage.setItem(LS_STARTED, fixedStart.toISOString());
 
         computeTravels();
         requestAnimationFrame(tick);
@@ -549,3 +555,4 @@
 
 
 </html>
+
