@@ -1,152 +1,527 @@
-<script>
-  const $ = sel => document.querySelector(sel);
+<!doctype html>
+<html lang="en">
 
-  const dEl = $("#d"), hEl = $("#h"), mEl = $("#m"), sEl = $("#s");
-  const input = $("#until");
-  const saveBtn = $("#save");
-  const shareBtn = $("#share");
-  const statusEl = $("#status");
-  const tzEl = $("#tz");
-  const boy = $("#boy"), girl = $("#girl"), hearts = $("#hearts");
-  const bar = $("#bar");
-  const scene = document.querySelector(".scene");
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Us — Countdown</title>
+    <meta name="description" content="A tiny pink countdown for two ❤️" />
+    <style>
+        :root {
+            --bg0: #fff0f6;
+            /* very light pink */
+            --bg1: #ffe3ec;
+            --pink: #ff4da6;
+            --pink-2: #ff77c8;
+            --pink-3: #ff99d8;
+            --ink: #2a2a2a;
+            --muted: #6b6b6b;
+            --card: #ffffffcc;
+            --radius: 20px;
+            --progress: 0;
+            /* 0..1 set by JS */
+        }
 
-  const LS_TARGET = "countdown:targetISO";
-  const LS_STARTED = "countdown:startedISO";
+        * {
+            box-sizing: border-box
+        }
 
-  // 1) ALWAYS clean our localStorage on page load
-  (function cleanStorageOnLoad() {
-    try {
-      localStorage.removeItem(LS_TARGET);
-      localStorage.removeItem(LS_STARTED);
-    } catch {}
-  })();
+        html,
+        body {
+            height: 100%
+        }
 
-  tzEl.textContent = `Your timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--ink);
+            background:
+                radial-gradient(1200px 600px at 80% -10%, #ffd6ea 0%, transparent 60%),
+                radial-gradient(1200px 600px at 10% 110%, #ffd6ea 0%, transparent 60%),
+                linear-gradient(180deg, var(--bg0), var(--bg1));
+        }
 
-  function pad(n) { return String(n).padStart(2, "0"); }
-  function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+        .wrap {
+            max-width: 920px;
+            margin: 28px auto;
+            padding: 24px;
+        }
 
-  // format Date -> yyyy-MM-ddTHH:mm for input[type=datetime-local]
-  function toLocalInputValue(dt) {
-      const z = new Date(dt.getTime() - dt.getTimezoneOffset() * 60000);
-      return z.toISOString().slice(0, 16);
-  }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
 
-  function parseQueryTarget() {
-      const p = new URLSearchParams(location.search);
-      const u = p.get("until");
-      if (!u) return null;
-      const dt = new Date(u);
-      return isNaN(dt.getTime()) ? null : dt;
-  }
+        header h1 {
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            font-size: clamp(20px, 3.8vw, 36px);
+            background: linear-gradient(90deg, var(--pink), var(--pink-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 0 #0000;
+        }
 
-  // 2) Use URL ?until=... if present, otherwise the fixed default
-  function readInitialTarget() {
-      return parseQueryTarget()
-          || new Date("2025-10-24T20:25:00");
-  }
+        /* Controls */
+        .panel {
+            background: var(--card);
+            backdrop-filter: blur(6px);
+            border: 1px solid #ffd3ea;
+            padding: 12px;
+            border-radius: var(--radius);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
 
-  function setTarget(dt, setStarted = true) {
-      if (!(dt instanceof Date) || isNaN(dt)) return;
-      localStorage.setItem(LS_TARGET, dt.toISOString());
-      if (setStarted) {
-          const now = new Date();
-          localStorage.setItem(LS_STARTED, now.toISOString());
-      }
-      // reflect in URL (shareable)
-      const url = new URL(location.href);
-      url.searchParams.set("until", dt.toISOString());
-      history.replaceState(null, "", url);
-      input.value = toLocalInputValue(dt);
-      feedback("Saved ✓");
-  }
+        .panel label {
+            font-size: 12px;
+            color: var(--muted)
+        }
 
-  function getStarted() {
-      const s = localStorage.getItem(LS_STARTED);
-      return s ? new Date(s) : null;
-  }
+        .panel input[type="datetime-local"] {
+            border: 1px solid #ffc4e2;
+            background: #fff;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--ink);
+        }
 
-  function feedback(msg) {
-      statusEl.textContent = msg;
-      clearTimeout(feedback._t);
-      feedback._t = setTimeout(() => statusEl.textContent = "", 2000);
-  }
+        .panel button {
+            border: 0;
+            padding: 10px 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--pink), var(--pink-2));
+            color: white;
+            box-shadow: 0 6px 18px #ff4da622;
+        }
 
-  // Compute stick travel distance in px so they meet at center
-  let travels = { boy: 0, girl: 0 };
-  function computeTravels() {
-      const rect = scene.getBoundingClientRect();
-      const center = rect.width / 2;
-      const bw = boy.offsetWidth, gw = girl.offsetWidth;
-      travels.boy = center - bw / 2 - 10;     // small overlap margin
-      travels.girl = center - gw / 2 - 10;
-  }
-  window.addEventListener("resize", computeTravels);
+        .panel .ghost {
+            background: #fff;
+            color: var(--pink);
+            border: 1px solid #ffc4e2;
+            box-shadow: none;
+            font-weight: 700;
+        }
 
-  function tick() {
-      // Always read from localStorage (which was seeded from URL/default at init)
-      const targetStr = localStorage.getItem(LS_TARGET);
-      const target = targetStr ? new Date(targetStr) : new Date();
-      const started = getStarted() || new Date();
+        .tiny {
+            font-size: 12px;
+            color: var(--muted)
+        }
 
-      const now = new Date();
-      const totalMs = Math.max(0, target - now);
-      const d = Math.floor(totalMs / (24 * 60 * 60 * 1000));
-      const h = Math.floor((totalMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-      const m = Math.floor((totalMs % (60 * 60 * 1000)) / (60 * 1000));
-      const s = Math.floor((totalMs % (60 * 1000)) / 1000);
+        /* Countdown */
+        .count {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin: 26px 0 24px;
+            text-align: center;
+        }
 
-      dEl.textContent = d;
-      hEl.textContent = pad(h);
-      mEl.textContent = pad(m);
-      sEl.textContent = pad(s);
+        .unit {
+            background: #fff;
+            border: 1px solid #ffd3ea;
+            border-radius: 18px;
+            padding: 14px 10px;
+            box-shadow: 0 12px 40px #ff4da610;
+        }
 
-      // Progress for bar + figures:
-      const denom = Math.max(1, target - started); // avoid /0
-      const progress = clamp(1 - ((target - now) / denom), 0, 1);
-      document.documentElement.style.setProperty("--progress", progress.toFixed(6));
-      bar.style.width = `calc(${(progress * 100).toFixed(4)}%)`;
+        .num {
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
 
-      // Move stick figures
-      boy.style.transform = `translateX(${(progress * travels.boy).toFixed(2)}px)`;
-      girl.style.transform = `translateX(${(-progress * travels.girl).toFixed(2)}px)`;
+        .num.days {
+            font-size: clamp(44px, 12vw, 96px);
+        }
 
-      // Hearts on finish
-      if (totalMs <= 0) {
-          hearts.classList.add("show");
-      } else {
-          hearts.classList.remove("show");
-      }
+        .num.hours {
+            font-size: clamp(34px, 9vw, 64px);
+        }
 
-      requestAnimationFrame(tick);
-  }
+        .num.mins {
+            font-size: clamp(26px, 7vw, 48px);
+        }
 
-  // ===== Init =====
-  const initTarget = readInitialTarget();
+        .num.secs {
+            font-size: clamp(22px, 6vw, 40px);
+        }
 
-  // Seed both UI and storage from chosen target (URL wins, else default)
-  input.value = toLocalInputValue(initTarget);
-  setTarget(initTarget, true); // writes LS_TARGET/LS_STARTED and updates URL & input
+        .label {
+            margin-top: 6px;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--muted);
+            letter-spacing: 1px
+        }
 
-  computeTravels();
-  requestAnimationFrame(tick);
+        /* Scene */
+        .scene {
+            position: relative;
+            height: 160px;
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, #fff, #ffe7f1);
+            border: 1px solid #ffd3ea;
+            box-shadow: inset 0 0 0 1px #fff, 0 14px 40px #ff4da610;
+            overflow: visible;
+            margin-top: 8px;
+        }
 
-  // Events
-  saveBtn.addEventListener("click", () => {
-      const v = input.value;
-      if (!v) { feedback("Pick a date/time"); return; }
-      const local = new Date(v);
-      if (isNaN(local.getTime())) { feedback("Invalid date"); return; }
-      setTarget(local, true);
-  });
+        .track {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 8px;
+            border-radius: 999px;
+            background: #ffd3ea;
+            box-shadow: inset 0 2px 4px #0000000e;
+        }
 
-  shareBtn.addEventListener("click", async () => {
-      try {
-          await navigator.clipboard.writeText(location.href);
-          feedback("Link copied ✨");
-      } catch {
-          feedback("Copy failed — you can copy the URL bar");
-      }
-  });
-</script>
+        .bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: calc(var(--progress) * 100%);
+            background: linear-gradient(90deg, var(--pink), var(--pink-2), var(--pink-3));
+            border-radius: 999px;
+            box-shadow: 0 0 12px #ff4da677;
+            transition: width 0.25s linear;
+        }
+
+        /* Stick figures anchored at ends; translate toward center via JS */
+        .figure {
+            position: absolute;
+            top: calc(50% - 60px);
+            /* vertical center-ish */
+            width: 90px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 4px 10px #ff4da61a);
+            transition: transform 0.25s linear;
+        }
+
+        .caption {
+            margin-top: 6px;
+            font-family: cursive, "Comic Sans MS", "Brush Script MT", sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--pink);
+            text-align: center;
+            width: 100%;
+        }
+
+        .figure.boy {
+            left: 8px
+        }
+
+        .figure.girl {
+            right: 8px
+        }
+
+        /* Hearts when done */
+        .hearts {
+            pointer-events: none;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -120%);
+            width: 220px;
+            height: 120px;
+            display: none;
+        }
+
+        .hearts.show {
+            display: block
+        }
+
+        .hearts span {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0;
+            animation: float 2.6s ease-in infinite;
+        }
+
+        .hearts span:nth-child(1) {
+            left: 10%;
+            animation-delay: 0s
+        }
+
+        .hearts span:nth-child(2) {
+            left: 28%;
+            animation-delay: 0.3s
+        }
+
+        .hearts span:nth-child(3) {
+            left: 46%;
+            animation-delay: 0.6s
+        }
+
+        .hearts span:nth-child(4) {
+            left: 62%;
+            animation-delay: 0.9s
+        }
+
+        .hearts span:nth-child(5) {
+            left: 78%;
+            animation-delay: 1.2s
+        }
+
+        .hearts span:nth-child(6) {
+            left: 36%;
+            animation-delay: 1.5s
+        }
+
+        .hearts span:nth-child(7) {
+            left: 70%;
+            animation-delay: 1.8s
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(12px) scale(0.8);
+                opacity: 0
+            }
+
+            15% {
+                opacity: 1
+            }
+
+            100% {
+                transform: translateY(-60px) scale(1.4);
+                opacity: 0
+            }
+        }
+
+        footer {
+            margin-top: 16px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <h1>Conto alla rovescia al nostro prossimo abbraccio 💞</h1>
+            <div class="tiny" id="tz"></div>
+        </header>
+
+        <div class="panel" id="panel">
+            <div style="display:flex; flex-direction:column; gap:4px">
+                <label for="until">Data di incontro</label>
+                <input id="until" type="datetime-local" disabled />
+            </div>
+            <button id="save" disabled>Save</button>
+            <button id="share" class="ghost" title="Copy link with the date">Share link</button>
+            <div class="tiny" id="status" aria-live="polite"></div>
+            <div class="caption">Fra + Rosa = 😍</div>
+        </div>
+
+        <section class="count" aria-live="polite" aria-atomic="true">
+            <div class="unit">
+                <div class="num days" id="d">0</div>
+                <div class="label">days</div>
+            </div>
+            <div class="unit">
+                <div class="num hours" id="h">0</div>
+                <div class="label">hours</div>
+            </div>
+            <div class="unit">
+                <div class="num mins" id="m">0</div>
+                <div class="label" style="font-size: 10px;">minutes</div>
+            </div>
+            <div class="unit">
+                <div class="num secs" id="s">0</div>
+                <div class="label" style="font-size: 10px;">seconds</div>
+            </div>
+        </section>
+
+        <div class="scene">
+            <div class="track">
+                <div class="bar" id="bar"></div>
+            </div>
+
+            <div class="figure boy" id="boy" aria-hidden="true">
+                <!-- simple boy stick figure (SVG) -->
+                <svg viewBox="0 0 90 120" width="90" height="120">
+                    <g stroke="#ff4da6" stroke-width="4" stroke-linecap="round" fill="none">
+                        <circle cx="45" cy="20" r="12" fill="#ffe3f1" stroke-width="3" />
+                        <path d="M45 32 L45 70" />
+                        <path d="M45 44 L28 56" />
+                        <path d="M45 44 L62 56" />
+                        <path d="M45 70 L30 100" />
+                        <path d="M45 70 L60 100" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="figure girl" id="girl" aria-hidden="true">
+                <!-- simple girl stick figure (SVG, tiny bow) -->
+                <svg viewBox="0 0 90 120" width="90" height="120">
+                    <g stroke="#ff77c8" stroke-width="4" stroke-linecap="round" fill="none">
+                        <circle cx="45" cy="20" r="12" fill="#ffe3f1" stroke-width="3" />
+                        <path d="M45 32 L45 70" />
+                        <path d="M45 44 L28 56" />
+                        <path d="M45 44 L62 56" />
+                        <path d="M45 70 L30 100" />
+                        <path d="M45 70 L60 100" />
+                        <!-- bow -->
+                        <path d="M38 13 Q35 18 38 23" />
+                        <path d="M52 13 Q55 18 52 23" />
+                    </g>
+                </svg>
+            </div>
+
+            <div class="hearts" id="hearts" aria-hidden="true">
+                <span>💗</span><span>💖</span><span>💘</span><span>💗</span><span>💞</span><span>💓</span><span>💕</span>
+            </div>
+        </div>
+
+        <footer class="tiny" style="opacity: 0">
+            Tip: you can share a link with <code>?until=</code> in the URL. Saving also stores the date locally.
+        </footer>
+    </div>
+
+    <script>
+        const $ = sel => document.querySelector(sel);
+
+        const dEl = $("#d"), hEl = $("#h"), mEl = $("#m"), sEl = $("#s");
+        const input = $("#until");
+        const saveBtn = $("#save");
+        const shareBtn = $("#share"); // we will disable this since URL is gone
+        const statusEl = $("#status");
+        const tzEl = $("#tz");
+        const boy = $("#boy"), girl = $("#girl"), hearts = $("#hearts");
+        const bar = $("#bar");
+        const scene = document.querySelector(".scene");
+
+        const LS_TARGET = "countdown:targetISO";
+        const LS_STARTED = "countdown:startedISO";
+        const DEFAULT_TARGET = new Date("2025-10-24T20:25:00"); // ← fixed target
+
+        // Always clean our app's storage on each load
+        (function cleanStorageOnLoad() {
+            try {
+                localStorage.removeItem(LS_TARGET);
+                localStorage.removeItem(LS_STARTED);
+            } catch { }
+        })();
+
+        tzEl.textContent = `Your timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`;
+
+        const pad = n => String(n).padStart(2, "0");
+        const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+        // Date -> "yyyy-MM-ddTHH:mm" for datetime-local
+        function toLocalInputValue(dt) {
+            const z = new Date(dt.getTime() - dt.getTimezoneOffset() * 60000);
+            return z.toISOString().slice(0, 16);
+        }
+
+        function setTarget(dt, setStarted = true) {
+            if (!(dt instanceof Date) || isNaN(dt)) return;
+            localStorage.setItem(LS_TARGET, dt.toISOString());
+            if (setStarted) localStorage.setItem(LS_STARTED, new Date().toISOString());
+            input.value = toLocalInputValue(dt);
+            feedback("Saved ✓");
+        }
+
+        function getStarted() {
+            const s = localStorage.getItem(LS_STARTED);
+            return s ? new Date(s) : null;
+        }
+
+        function feedback(msg) {
+            statusEl.textContent = msg;
+            clearTimeout(feedback._t);
+            feedback._t = setTimeout(() => statusEl.textContent = "", 2000);
+        }
+
+        // Compute stick travel distance so they meet at center
+        let travels = { boy: 0, girl: 0 };
+        function computeTravels() {
+            const rect = scene.getBoundingClientRect();
+            const center = rect.width / 2;
+            const bw = boy.offsetWidth, gw = girl.offsetWidth;
+            travels.boy = center - bw / 2 - 10;
+            travels.girl = center - gw / 2 - 10;
+        }
+        window.addEventListener("resize", computeTravels);
+
+        function tick() {
+            const targetStr = localStorage.getItem(LS_TARGET);
+            const target = targetStr ? new Date(targetStr) : DEFAULT_TARGET;
+            const started = getStarted() || new Date();
+
+            const now = new Date();
+            const totalMs = Math.max(0, target - now);
+            const d = Math.floor(totalMs / 86400000);
+            const h = Math.floor((totalMs % 86400000) / 3600000);
+            const m = Math.floor((totalMs % 3600000) / 60000);
+            const s = Math.floor((totalMs % 60000) / 1000);
+
+            dEl.textContent = d;
+            hEl.textContent = pad(h);
+            mEl.textContent = pad(m);
+            sEl.textContent = pad(s);
+
+            const denom = Math.max(1, target - started);
+            const progress = clamp(1 - ((target - now) / denom), 0, 1);
+            document.documentElement.style.setProperty("--progress", progress.toFixed(6));
+            bar.style.width = `calc(${(progress * 100).toFixed(4)}%)`;
+
+            boy.style.transform = `translateX(${(progress * travels.boy).toFixed(2)}px)`;
+            girl.style.transform = `translateX(${(-progress * travels.girl).toFixed(2)}px)`;
+
+            hearts.classList.toggle("show", totalMs <= 0);
+
+            requestAnimationFrame(tick);
+        }
+
+        // ===== Init =====
+        // Seed storage + UI from fixed target
+        setTarget(DEFAULT_TARGET, true);
+
+        computeTravels();
+        requestAnimationFrame(tick);
+
+        // Keep Save logic ready (button remains disabled in HTML)
+        saveBtn.addEventListener("click", () => {
+            const v = input.value;
+            if (!v) { feedback("Pick a date/time"); return; }
+            const local = new Date(v);
+            if (isNaN(local.getTime())) { feedback("Invalid date"); return; }
+            setTarget(local, true);
+        });
+
+        // URL feature removed → disable Share button to avoid confusion
+        if (shareBtn) {
+            shareBtn.disabled = true;
+            shareBtn.title = "Sharing via URL is disabled";
+            shareBtn.addEventListener("click", () => feedback("Sharing is disabled"));
+        }
+    </script>
+
+</body>
+
+</html>
