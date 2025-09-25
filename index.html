@@ -441,7 +441,7 @@
             // Priority: ?until=... → localStorage → default (now+7 days)
             return parseQueryTarget()
                 || (localStorage.getItem(LS_TARGET) ? new Date(localStorage.getItem(LS_TARGET)) : null)
-                || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+                || new Date("2025-10-24T20:25:00");
         }
 
         function setTarget(dt, setStarted = true) {
@@ -549,3 +549,4 @@
 </body>
 
 </html>
+
