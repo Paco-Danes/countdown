@@ -408,7 +408,7 @@
         const dEl = $("#d"), hEl = $("#h"), mEl = $("#m"), sEl = $("#s");
         const input = $("#until");
         const saveBtn = $("#save");
-        const shareBtn = $("#share"); // we will disable this since URL is gone
+        const shareBtn = $("#share");
         const statusEl = $("#status");
         const tzEl = $("#tz");
         const boy = $("#boy"), girl = $("#girl"), hearts = $("#hearts");
@@ -416,14 +416,13 @@
         const scene = document.querySelector(".scene");
 
         const LS_TARGET = "countdown:targetISO";
-        const LS_STARTED = "countdown:startedISO";
-        const DEFAULT_TARGET = new Date("2025-10-24T20:25:00"); // ← fixed target
+        const DEFAULT_TARGET = new Date("2025-10-24T20:25:00"); // fixed target
+        const FIXED_START = new Date("2025-09-24T00:00:00");   // ← fixed start date
 
-        // Always clean our app's storage on each load
+        // Always clean our app's storage on each load (only target really matters now)
         (function cleanStorageOnLoad() {
             try {
                 localStorage.removeItem(LS_TARGET);
-                localStorage.removeItem(LS_STARTED);
             } catch { }
         })();
 
@@ -438,23 +437,17 @@
             return z.toISOString().slice(0, 16);
         }
 
-        function setTarget(dt, setStarted = true) {
+        function setTarget(dt) {
             if (!(dt instanceof Date) || isNaN(dt)) return;
             localStorage.setItem(LS_TARGET, dt.toISOString());
-            if (setStarted) localStorage.setItem(LS_STARTED, new Date().toISOString());
             input.value = toLocalInputValue(dt);
             feedback("Saved ✓");
-        }
-
-        function getStarted() {
-            const s = localStorage.getItem(LS_STARTED);
-            return s ? new Date(s) : null;
         }
 
         function feedback(msg) {
             statusEl.textContent = msg;
             clearTimeout(feedback._t);
-            feedback._t = setTimeout(() => statusEl.textContent = "", 2000);
+            feedback._t = setTimeout(() => (statusEl.textContent = ""), 2000);
         }
 
         // Compute stick travel distance so they meet at center
@@ -471,9 +464,10 @@
         function tick() {
             const targetStr = localStorage.getItem(LS_TARGET);
             const target = targetStr ? new Date(targetStr) : DEFAULT_TARGET;
-            const started = getStarted() || new Date();
 
             const now = new Date();
+
+            // countdown to target (unchanged)
             const totalMs = Math.max(0, target - now);
             const d = Math.floor(totalMs / 86400000);
             const h = Math.floor((totalMs % 86400000) / 3600000);
@@ -485,8 +479,10 @@
             mEl.textContent = pad(m);
             sEl.textContent = pad(s);
 
-            const denom = Math.max(1, target - started);
-            const progress = clamp(1 - ((target - now) / denom), 0, 1);
+            // PROGRESS: from FIXED_START -> target
+            const denom = Math.max(1, target - FIXED_START);
+            const progress = clamp((now - FIXED_START) / denom, 0, 1);
+
             document.documentElement.style.setProperty("--progress", progress.toFixed(6));
             bar.style.width = `calc(${(progress * 100).toFixed(4)}%)`;
 
@@ -500,18 +496,18 @@
 
         // ===== Init =====
         // Seed storage + UI from fixed target
-        setTarget(DEFAULT_TARGET, true);
+        setTarget(DEFAULT_TARGET);
 
         computeTravels();
         requestAnimationFrame(tick);
 
-        // Keep Save logic ready (button remains disabled in HTML)
+        // Save logic (button is disabled in HTML; keep for completeness)
         saveBtn.addEventListener("click", () => {
             const v = input.value;
             if (!v) { feedback("Pick a date/time"); return; }
             const local = new Date(v);
             if (isNaN(local.getTime())) { feedback("Invalid date"); return; }
-            setTarget(local, true);
+            setTarget(local);
         });
 
         shareBtn.addEventListener("click", async () => {
@@ -523,6 +519,7 @@
             }
         });
     </script>
+
 
 </body>
 
