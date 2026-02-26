@@ -288,7 +288,7 @@
 
   <header>
     <h1>Model Response Comparison: Opus KG-mcp vs. Opus Plain</h1>
-    <p>Domain: Neurodevelopmental Biology &nbsp;·&nbsp; Format: Reasoning + Direct Response &nbsp;·&nbsp; Evaluated: 4
+    <p>Domain: Neurodevelopmental Biology &nbsp;·&nbsp; Format: Reasoning + Direct Response &nbsp;·&nbsp; Evaluated: 3
       questions</p>
   </header>
 
@@ -1124,14 +1124,71 @@
   </div>
 
   <script>
-    document.querySelectorAll('.show-toggle').forEach(toggle => {
-      const body = toggle.previousElementSibling;
-      toggle.addEventListener('click', () => {
-        const isCollapsed = body.classList.contains('collapsed');
-        body.classList.toggle('collapsed', !isCollapsed);
-        toggle.textContent = isCollapsed ? 'show less' : 'show more';
+    (function () {
+      function closest(el, selector) {
+        while (el && el.nodeType === 1) {
+          if (el.matches(selector)) return el;
+          el = el.parentElement;
+        }
+        return null;
+      }
+
+      function setToggleText(grid, expanded) {
+        var toggles = grid.querySelectorAll('.show-toggle');
+        for (var i = 0; i < toggles.length; i++) {
+          toggles[i].textContent = expanded ? 'show less' : 'show more';
+        }
+      }
+
+      function setBodiesCollapsed(grid, collapsed) {
+        var bodies = grid.querySelectorAll('.reasoning-body');
+        for (var i = 0; i < bodies.length; i++) {
+          if (collapsed) bodies[i].classList.add('collapsed');
+          else bodies[i].classList.remove('collapsed');
+        }
+      }
+
+      // Safari-friendly scrollTo target inside a question block
+      function scrollBackToReasoning(questionBlock) {
+        var target =
+          questionBlock.querySelector('.question-text') ||
+          questionBlock.querySelector('.question-label') ||
+          questionBlock;
+
+        var rect = target.getBoundingClientRect();
+        var y = rect.top + window.pageYOffset - 16; // small breathing room
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+
+      document.querySelectorAll('.show-toggle').forEach(function (toggle) {
+        toggle.addEventListener('click', function (e) {
+          var grid = closest(toggle, '.comparison-grid');
+          if (!grid) return;
+
+          // Determine current state from first reasoning body in this grid
+          var firstBody = grid.querySelector('.reasoning-body');
+          if (!firstBody) return;
+
+          var currentlyCollapsed = firstBody.classList.contains('collapsed');
+          var willExpand = currentlyCollapsed; // if collapsed -> expand; else collapse
+
+          // If we are collapsing, capture where to return BEFORE layout changes
+          var questionBlock = closest(grid, '.question-block');
+
+          // Apply synchronized state
+          setBodiesCollapsed(grid, !willExpand);
+          setToggleText(grid, willExpand);
+
+          // After collapsing, bring viewport back to the question/reasoning area
+          if (!willExpand && questionBlock) {
+            // wait a frame so the DOM/layout updates (works well in Safari)
+            requestAnimationFrame(function () {
+              scrollBackToReasoning(questionBlock);
+            });
+          }
+        });
       });
-    });
+    })();
   </script>
 
 </body>
