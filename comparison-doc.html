@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Model Comparison: Opus KG-mcp vs. Opus Plain</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 48px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    header {
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 16px;
+      margin-bottom: 10px;
+    }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      font-size: 12px;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .legend {
+      display: flex;
+      gap: 24px;
+      margin: 18px 0 32px;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-kg {
+      background: #2a2a2a;
+    }
+
+    .dot-plain {
+      background: #888;
+    }
+
+    .question-block {
+      margin-bottom: 48px;
+    }
+
+    .question-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .question-text {
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 18px;
+      color: #111;
+      border-left: 3px solid #1a1a1a;
+      padding-left: 10px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid #ddd;
+    }
+
+    .col-header {
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .col-header.kg {
+      background: #1a1a1a;
+      color: #fff;
+      border-right: 1px solid #ddd;
+    }
+
+    .col-header.plain {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .cell {
+      padding: 14px 16px;
+      vertical-align: top;
+    }
+
+    .cell.kg {
+      border-right: 1px solid #ddd;
+      background: #fafafa;
+    }
+
+    .cell.plain {
+      background: #fff;
+    }
+
+    .cell-section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #999;
+      margin-bottom: 5px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .cell-content {
+      font-size: 13.5px;
+      color: #222;
+    }
+
+    .reasoning-body {
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .reasoning-body.collapsed {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cell-content.collapsed {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .show-toggle {
+      display: inline-block;
+      margin-top: 5px;
+      font-size: 11px;
+      color: #aaa;
+      cursor: pointer;
+      user-select: none;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.04em;
+    }
+
+    .show-toggle:hover {
+      color: #555;
+    }
+
+    .divider-row {
+      grid-column: 1 / -1;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    .notes-row {
+      grid-column: 1 / -1;
+      background: #fffdf4;
+      border-top: 1px solid #e8e0c0;
+      padding: 12px 16px;
+    }
+
+    .notes-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #b0902a;
+      margin-bottom: 4px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .notes-content {
+      font-size: 13px;
+      color: #555;
+      font-style: italic;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #333;
+      margin-top: 0.8em;
+      margin-bottom: 0.5em;
+    }
+
+    h1 {
+      font-size: 2em;
+    }
+
+    h2 {
+      font-size: 1.5em;
+    }
+
+    h3 {
+      font-size: 1.2em;
+    }
+
+    code {
+      background: #f4f4f4;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+
+    pre {
+      background: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      line-height: 1.4;
+    }
+
+    blockquote {
+      border-left: 4px solid #ddd;
+      margin: 1em 0;
+      padding-left: 20px;
+      color: #ffffff;
+      font-style: italic;
+      background-color: #444;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1em 0;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+
+    ul,
+    ol {
+      margin: 1em 0;
+      padding-left: 2em;
+    }
+
+    li {
+      margin: 0.5em 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Model Response Comparison: Opus KG-mcp vs. Opus Plain</h1>
+    <p>Domain: Neurodevelopmental Biology &nbsp;·&nbsp; Format: Reasoning + Direct Response &nbsp;·&nbsp; Evaluated: 3
+      questions</p>
+  </header>
+
+  <div class="legend">
+    <span><span class="legend-dot dot-kg"></span> Opus KG-mcp — knowledge-graph augmented</span>
+    <span><span class="legend-dot dot-plain"></span> Opus Plain — baseline model</span>
+  </div>
+
+  <!-- QUESTION 1 -->
+  <div class="question-block">
+    <div class="question-label">Question 1</div>
+    <div class="question-text">Considering that the medial eminence is exposed to vascularisation, which tanycyte
+      subtypes would you expect to show the strongest increase in immune programs in aging?</div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <h3>Tanycyte subtype identity from the graph</h3>
+            <p>Based on spatial mapping and transcription factor profiles, the 8 tanycyte clusters map to classical
+              subtypes as follows:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th>Supertype</th>
+                  <th>Primary region</th>
+                  <th>Classical identity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>5243</td>
+                  <td>NN_1</td>
+                  <td>Choroid plexus / SFO</td>
+                  <td>CVO-associated</td>
+                </tr>
+                <tr>
+                  <td>5244</td>
+                  <td>NN_1</td>
+                  <td>AVPV / OVLT</td>
+                  <td>CVO-associated</td>
+                </tr>
+                <tr>
+                  <td>5245</td>
+                  <td>NN_2</td>
+                  <td>PVi (88%)</td>
+                  <td><strong>β1-tanycyte</strong></td>
+                </tr>
+                <tr>
+                  <td>5246</td>
+                  <td>NN_2</td>
+                  <td>PVi + ARH</td>
+                  <td><strong>β2-tanycyte</strong></td>
+                </tr>
+                <tr>
+                  <td>5247</td>
+                  <td>NN_2</td>
+                  <td>ARH (60%) + PVp</td>
+                  <td><strong>╬▓1-tanycyte</strong></td>
+                </tr>
+                <tr>
+                  <td>5248</td>
+                  <td>NN_2</td>
+                  <td>PVp + V3</td>
+                  <td>β2-posterior</td>
+                </tr>
+                <tr>
+                  <td>5249</td>
+                  <td>NN_2</td>
+                  <td>ARH (76%) + V3</td>
+                  <td><strong>╬▓1-tanycyte</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>5250</strong></td>
+                  <td><strong>NN_3</strong></td>
+                  <td><strong>ME (46%)</strong> + ARH</td>
+                  <td><strong>╬▓2-tanycyte</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <h3>Ranked predictions</h3>
+            <p><strong>1. ╬▓2-tanycytes (cluster 5250 / Tanycyte NN_3) - strongest effect</strong></p>
+            <ul>
+              <li><strong>Only tanycyte cluster with direct ME mapping</strong> (fraction = 0.46) - no other tanycyte
+                cluster shows any ME signal.</li>
+              <li>╬▓2-tanycytes line the ventral floor of the 3rd ventricle and extend processes into the ME external
+                zone, where they directly contact <strong>fenestrated capillaries</strong> of the
+                hypothalamic-hypophyseal portal system. These capillaries lack a blood-brain barrier.</li>
+              <li>This makes ╬▓2-tanycytes the primary cellular interface between peripheral blood and the CNS at the
+                ME. During aging, rising levels of circulating pro-inflammatory cytokines (IL-6, TNF-β, IL-1╬▓ -
+                &quot;inflammaging&quot;) would directly stimulate these cells.</li>
+              <li>The marker <strong>Ecrg4</strong> (augurin) is notable: it encodes a secreted peptide that is cleaved
+                under inflammatory conditions and has been shown to activate innate immune pathways. Its expression in
+                ╬▓2-tanycytes supports a role as an immune sentinel.</li>
+              <li>TF <strong>Fosb</strong> (an immediate-early gene/AP-1 component) suggests these cells are
+                particularly responsive to extracellular stimuli, including inflammatory signaling cascades.</li>
+            </ul>
+            <p><strong>2. ╬▓1-tanycytes (clusters 5247, 5249 / Tanycyte NN_2 subset) - moderate effect</strong></p>
+            <ul>
+              <li>Map predominantly to the <strong>arcuate nucleus</strong> (ARH), which sits immediately adjacent to
+                the ME and receives vascular leakage from ME fenestrated capillaries.</li>
+              <li>╬▓1 processes extend laterally along the ME border, giving them partial exposure to blood-borne
+                signals.</li>
+              <li>They would receive paracrine inflammatory signals from ╬▓2-tanycytes and experience indirect BBB
+                compromise.</li>
+              <li>TFs <strong>Tbx3</strong> (5247) and <strong>Six6</strong> (5249) suggest distinct functional
+                identities but shared vascular adjacency.</li>
+            </ul>
+            <p><strong>3. β2-tanycytes (cluster 5246) - lower but non-negligible</strong></p>
+            <ul>
+              <li>Map to PVi + ARH, more dorsal than ╬▓-tanycytes.</li>
+              <li>Notably, <strong>Dock8</strong> is a cell-type marker - this is a guanine nucleotide exchange factor
+                critically involved in immune cell migration and dendritic cell function. Its expression as a defining
+                marker suggests these cells have some baseline immune-interface capacity.</li>
+              <li>However, being more distant from fenestrated capillaries, the effect would be weaker.</li>
+            </ul>
+            <p><strong>4. β1-tanycytes and CVO-associated tanycytes - least effect at ME specifically</strong></p>
+            <ul>
+              <li>β1 (5245) maps to dorsal PVi, far from ME vasculature.</li>
+              <li>NN_1 clusters (5243, 5244) are at other CVOs (SFO, OVLT, choroid plexus) - they would show immune
+                activation from vascular exposure at <em>their respective locations</em>, but not from ME-specific
+                vascularization.</li>
+            </ul>
+            <h3>Mechanistic rationale</h3>
+            <p>The key biological principle is <strong>gradient of vascular exposure</strong>: the ME has fenestrated
+              capillaries without BBB ÔåÆ ╬▓2-tanycytes (floor of 3rd ventricle, processes in ME parenchyma) are
+              maximally exposed ÔåÆ ╬▓1-tanycytes (lateral ME/ventral ARH) have partial exposure ÔåÆ β-tanycytes (more
+              dorsal) are progressively shielded. During aging, peripheral inflammatory load increases
+              (&quot;inflammaging&quot;), and the cells with the most direct vascular contact will show the strongest
+              transcriptional upregulation of innate immune programs (MHC-I, interferon-stimulated genes, complement,
+              NF-╬║B targets).</p>
+            <h3>Remaining uncertainty</h3>
+            <ul>
+              <li>The graph database captures steady-state adult markers, not aging dynamics - the prediction is based
+                on anatomical position and vascular exposure logic rather than direct aging transcriptomic data.</li>
+              <li>Whether immune program upregulation is cell-autonomous (direct cytokine sensing) or paracrine (via
+                ME-resident microglia/macrophages signaling to tanycytes) cannot be distinguished from this data alone.
+              </li>
+            </ul>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed"> Here&#39;s the reasoning:
+            <h3>Anatomical logic</h3>
+            <p>Tanycytes are arrayed along a dorsoventral gradient on the walls and floor of the third ventricle, and
+              their subtypes differ critically in what they contact:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Subtype</th>
+                  <th>Position</th>
+                  <th>Vascular contact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>α1</td>
+                  <td>Dorsal (VMH region)</td>
+                  <td>Standard BBB vasculature</td>
+                </tr>
+                <tr>
+                  <td>α2</td>
+                  <td>Intermediate (arcuate)</td>
+                  <td>Standard BBB vasculature</td>
+                </tr>
+                <tr>
+                  <td><strong>β1</strong></td>
+                  <td>Lateral ME</td>
+                  <td>Approaching fenestrated capillaries</td>
+                </tr>
+                <tr>
+                  <td><strong>β2</strong></td>
+                  <td>Floor / ventral ME</td>
+                  <td><strong>Processes terminate directly on fenestrated portal capillaries</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The median eminence is a <strong>circumventricular organ</strong> — its capillary plexus is fenestrated
+              and lacks a conventional blood-brain barrier. This means blood-borne cytokines, DAMPs, and other
+              inflammatory mediators have direct access.</p>
+            <h3>Why β2 tanycytes specifically</h3>
+            <p><strong>β2 tanycytes</strong> are the subtype whose end-feet directly abut the fenestrated perivascular
+              space of the ME. During aging, systemic &quot;inflammaging&quot; elevates circulating pro-inflammatory
+              factors (TNFα, IL-6, IL-1β, etc.). Because β2 tanycytes are the first CNS-resident cells to encounter
+              these signals without BBB filtering, they would be expected to show the <strong>strongest transcriptional
+                activation of innate immune and interferon-response programs</strong> — including upregulation of genes
+              in the MHC-I/II pathway, complement cascade, and NF-κB signaling.</p>
+            <p><strong>β1 tanycytes</strong> occupy the lateral ME and have partial exposure to this milieu, so they
+              represent a graded, somewhat weaker response.</p>
+            <p><strong>α1/α2 tanycytes</strong>, by contrast, sit behind a conventional BBB and are largely shielded
+              from peripheral inflammatory signals, so their immune program activation during aging would be
+              comparatively modest.</p>
+            <h3>Summary</h3>
+            <blockquote>
+              <p>Given the fenestrated vasculature of the median eminence, <strong>β2 tanycytes</strong> — and to a
+                lesser extent <strong>β1 tanycytes</strong> — are the subtypes most directly exposed to age-related
+                increases in circulating inflammatory mediators. They would therefore be predicted to show the strongest
+                upregulation of immune and inflammatory transcriptional programs with aging.</p>
+            </blockquote>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content"><b>β2-tanycytes</b> (Tanycyte NN_3) and <b>β1-tanycytes</b> would show the strongest
+          increase in immune programs during aging.</div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content">
+          <p>The answer centers on <strong>β2 tanycytes</strong>, with <strong>β1 tanycytes</strong> as a secondary
+            candidate.</p>
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Bla bla bla</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 2 -->
+  <div class="question-block">
+    <div class="question-label">Question 2</div>
+    <div class="question-text">I want to target genetically somatostatin interneurons of cortex somatosensory layer 4,
+      specifically, without targeting any other population among the Sst positive populations. Which gene should I
+      target?
+    </div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p><strong>Step 1 - Identify the target population:</strong>
+              Among all 96 Sst clusters in the database, I identified which ones are spatially enriched in somatosensory
+              cortex layer 4 (SSs4). The top hit is <strong>cluster 799 (Sst Gaba_9)</strong> with 14% of its cells
+              mapped to SSs4 - the highest of any Sst cluster by a wide margin (next: cluster 800 at 7%, cluster 801
+              at 5%).</p>
+            <p><strong>Step 2 - Find unique markers:</strong>
+              Cluster 799 has three cell-type markers: <strong>Dysf</strong>, Pdyn, and Prdm1. I tested each for
+              uniqueness across all Sst populations:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Marker</th>
+                  <th># other Sst clusters sharing it</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Dysf</strong></td>
+                  <td><strong>0</strong></td>
+                </tr>
+                <tr>
+                  <td>Pdyn</td>
+                  <td>25</td>
+                </tr>
+                <tr>
+                  <td>Prdm1</td>
+                  <td>15</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Dysf is a ct_marker for exactly ONE cluster in the entire database</strong> - cluster 799. No
+              other Sst cluster, and in fact no other cluster of any type, carries Dysf as a marker.</p>
+            <p><strong>Step 3 - Proposed targeting strategy:</strong>
+              An intersectional genetic approach using <strong>Sst-Cre ├ù Dysf-Flp</strong> (or equivalent
+              dual-recombinase system) would:</p>
+            <ul>
+              <li>Restrict labeling to Sst+ cells (eliminating all non-interneuron expression)</li>
+              <li>Within Sst+, restrict to only cluster 799 (the most L4-somatosensory-enriched Sst type)</li>
+              <li>Exclude all other 95 Sst populations</li>
+            </ul>
+            <h3>Caveats</h3>
+            <ul>
+              <li>Cluster 799 is enriched in SS L4 (14%) but not exclusive to it - it also appears in VISp layer 4
+                (6%) and MOp layer 5 (4%). A viral injection restricted to somatosensory cortex would solve this spatial
+                specificity.</li>
+              <li>If you need broader coverage of <em>all</em> Sst cells in SS L4 (not just the most enriched cluster),
+                consider <strong>Prdm1</strong>, which marks the entire Sst Gaba_9 supertype (clusters 798-801,
+                collectively ~27% in SSs4), but at the cost of also marking 15 other Sst clusters elsewhere.</li>
+              <li><strong>Zfp618</strong> is also a transcription factor unique to cluster 799 among Sst populations and
+                could serve as an alternative.</li>
+            </ul>
+            <p><strong>Bottom line:</strong> For maximum specificity to Sst+ layer 4 somatosensory interneurons without
+              off-targeting other Sst populations, target <strong>Dysf</strong>.</p>
+            <b>My follow up:</b> <em>Somebody suggests: "Hpse, since Hpse is the only marker that is specific to that
+              population and not others”. Is he right or wrong?</em>
+            <br>Opus: <br>
+            I already checked Hpse earlier. Let me pull up the data explicitly to evaluate the claim.
+            <p><strong>He&#39;s wrong.</strong> Hpse is not specific to the SS L4 Sst population. It is a ct_marker
+              shared by <strong>7 different Sst clusters</strong> across 5 different supertypes:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th>Supertype</th>
+                  <th>In SSs4?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>768</td>
+                  <td>Sst Gaba_3</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>792</td>
+                  <td>Sst Gaba_7</td>
+                  <td>5%</td>
+                </tr>
+                <tr>
+                  <td>793</td>
+                  <td>Sst Gaba_7</td>
+                  <td>4%</td>
+                </tr>
+                <tr>
+                  <td>794</td>
+                  <td>Sst Gaba_7</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td><strong>800</strong></td>
+                  <td><strong>Sst Gaba_9</strong></td>
+                  <td><strong>7%</strong></td>
+                </tr>
+                <tr>
+                  <td>816</td>
+                  <td>Sst Gaba_15</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>828</td>
+                  <td>Sst Gaba_19</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Targeting Hpse within an Sst-Cre strategy would hit at least 7 clusters spanning 5 supertypes - most of
+              which have nothing to do with somatosensory layer 4. This directly violates the requirement of &quot;not
+              targeting any other Sst population.&quot;</p>
+            <p><strong>Dysf</strong> remains the correct answer: it marks exactly 1 cluster (799) out of 96 Sst
+              clusters, and that cluster is the most SSs4-enriched Sst type in the database.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>In the Allen Institute&#39;s transcriptomic taxonomy of adult mouse cortex (Tasic et al., 2018), Sst
+              interneurons are split into numerous transcriptomic subtypes. Among these, the <strong>Sst Hpse</strong>
+              cluster(s) (e.g., <em>Sst Hpse Cbln4</em>, <em>Sst Hpse Sema3c</em>) are specifically enriched in
+              <strong>layer 4 of primary sensory cortices</strong>, including somatosensory barrel cortex (SSp).
+            </p>
+            <p>Why Hpse works as a discriminating marker:</p>
+            <ol>
+              <li>
+                <p><strong>Layer specificity</strong> - Hpse expression within Sst+ neurons is heavily biased toward
+                  L4, where these interneurons provide feedforward inhibition onto excitatory stellate/pyramidal cells
+                  receiving thalamocortical input.</p>
+              </li>
+              <li>
+                <p><strong>Exclusion of other Sst populations</strong> - Other major Sst subtypes (e.g., Sst Chodl
+                  long-range projecting neurons, Sst Calb2 Martinotti-like cells in L2/3-L5, Sst Chrna2, Sst Myh8,
+                  etc.) do <strong>not</strong> co-express Hpse at significant levels, making it a clean discriminator
+                  within the Sst lineage.</p>
+              </li>
+              <li>
+                <p><strong>Region enrichment</strong> - Hpse-expressing Sst neurons are enriched in granular sensory
+                  cortices (which have a prominent L4), further narrowing expression to somatosensory, visual, and
+                  auditory cortex - regions with prominent thalamocortical L4 input.</p>
+              </li>
+            </ol>
+            <h2>Practical Targeting Strategy</h2>
+            <p>Use an <strong>intersectional genetic approach</strong>:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Component</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Sst-Cre</strong> driver line</td>
+                  <td>Restricts to all Sst+ interneurons</td>
+                </tr>
+                <tr>
+                  <td><strong>Hpse-FlpO</strong> driver (or Hpse enhancer-driven AAV)</td>
+                  <td>Restricts to Hpse+ cells</td>
+                </tr>
+                <tr>
+                  <td><strong>Cre- and Flp-dependent effector</strong> (e.g., dual-recombinase AAV)</td>
+                  <td>Only activates at the intersection</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Injecting into somatosensory cortex adds a third layer of spatial restriction, giving you highly specific
+              access to L4 Sst interneurons of SSp.</p>
+            <h2>Caveats</h2>
+            <ul>
+              <li>If absolute exclusivity is required, confirm with single-cell RNA-seq data (e.g., Allen Brain Cell
+                Atlas) that Hpse is not expressed in any off-target Sst subtype in your specific region of interest.
+              </li>
+              <li>A small number of Hpse+ Sst neurons may exist in L4 of other sensory cortices (V1, A1), so stereotaxic
+                injection coordinates provide the final spatial restriction to somatosensory cortex specifically.</li>
+            </ul>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content">Answer: <b>Dysf</b> (Dysferlin)</div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content"><b>Hpse</b> (heparanase) is the gene you should target in an intersectional strategy
+          with Sst.</div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Different response ! Note that Opus-KG even if prompted with a
+          follow-up regarding Hpse, still held its ground. Also plain Opus said to check whether Hpse is expressed in
+          any off-target Sst subtype in your specific region, which was exactly what Opus-KG did and why it discarded
+          Hpse. -- (from both reasoning lines)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 3 -->
+  <div class="question-block">
+    <div class="question-label">Question 3</div>
+    <div class="question-text">How many electrophysiologically distinct populations (by populations I mean, typically
+      exhibiting different neuropeptides) would light up if I used an enhancer targeting Lamp5?
+    </div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">These 26 clusters exhibit <strong>13 unique
+              neuropeptide signatures</strong>, which define the electrophysiologically distinct populations:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Neuropeptide signature</th>
+                  <th>Clusters</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Cort + Npy + Cck + Pnoc</td>
+                  <td>706, 709, 710, 724, 725, 726, 731</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Cck + Pnoc</td>
+                  <td>711, 712, 720, 722, 723</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Npy + Cck + Pnoc</td>
+                  <td>715, 721, 730</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Npy + Pnoc</td>
+                  <td>707, 718</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Cort + Npy + Pnoc</td>
+                  <td>708</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Cort + Cck + Pnoc</td>
+                  <td>729</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Pnoc only</td>
+                  <td>713</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Npy + Penk + Pnoc + Crh + Tac2</td>
+                  <td>714</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Crh + Npy + Pnoc</td>
+                  <td>717</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Npy + Tac2</td>
+                  <td>716</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Npy + Tac2 + Cck</td>
+                  <td>719</td>
+                </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Sst + Pnoc + Cort + Tac1</td>
+                  <td>727</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>Pnoc + Cartpt + Cort + Tac1 + Cck</td>
+                  <td>728</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>Key biological patterns:</p>
+            <ul>
+              <li><strong>Pnoc (prepronociceptin)</strong> is nearly universal (24/26 clusters), serving as a Lamp5
+                lineage signature.</li>
+              <li><strong>Cck</strong> and <strong>Npy</strong> are the next most common, splitting the population into
+                major subgroups.</li>
+              <li><strong>Cort</strong> marks a distinct subset (11 clusters), predominantly in the Lamp5 Lhx6-derived
+                (MGE-origin) populations.</li>
+              <li>Rare neuropeptides (<strong>Tac1, Tac2, Crh, Penk, Cartpt, Sst</strong>) define the most specialized
+                populations, mostly singleton clusters.</li>
+              <li>The Lamp5 Lhx6 subclass (MGE-derived) shows richer neuropeptide diversity (Sst, Tac1, Cartpt) compared
+                to the CGE-derived Lamp5 Gaba subclass, consistent with their distinct developmental origins.</li>
+            </ul>
+            <h2>Doubts</h2>
+            <ul>
+              <li>All neuropeptide markers have <code>avg_log2 = 1.0</code>, so I cannot distinguish dominant vs.
+                low-level co-expression. In practice, some neuropeptides may be expressed at sub-functional levels,
+                which would reduce the number of truly <em>functionally</em> distinct populations.</li>
+              <li>An enhancer&#39;s actual labeling efficiency may not capture all 26 clusters equally - some may
+                express Lamp5 at levels below the enhancer&#39;s activation threshold, potentially labeling fewer
+                populations in practice.</li>
+              <li>The electrophysiological distinctness implied by neuropeptide differences is an approximation; cells
+                with identical neuropeptide signatures but different ion channel profiles could still differ
+                electrophysiologically.</li>
+            </ul>
+            <b>My follow up:</b> <em> Ok, just to be clear, what are this 2 subclasses you found and talked about?</em>
+            <p>The two Lamp5 subclasses are:</p>
+            <ol>
+              <li><strong>Lamp5 Gaba</strong> - CGE-derived (caudal ganglionic eminence), 18 clusters</li>
+              <li><strong>Lamp5 Lhx6 Gaba</strong> - MGE-derived (medial ganglionic eminence), 8 clusters</li>
+            </ol>
+            <p>The key distinction is <strong>Lhx6</strong>: it&#39;s a transcription factor that marks MGE-derived
+              interneurons. So while both subclasses express Lamp5, they originate from different embryonic progenitor
+              zones, giving the Lhx6+ group a distinct molecular and electrophysiological identity (e.g., the unique
+              Sst, Tac1, Cartpt neuropeptide markers).</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>... distinguishable by their neuropeptide profiles: <br><br></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Neuropeptide Marker</th>
+                  <th>Cell Type</th>
+                  <th>Electrophysiological Signature</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><strong>NPY</strong></td>
+                  <td>Neurogliaform cells (Lamp5/Ndnf)</td>
+                  <td>Late-spiking, dense local inhibition</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><strong>SST</strong></td>
+                  <td>Lamp5/Lhx6 (MGE-derived)</td>
+                  <td>Chandelier-like, fast-spiking features</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><strong>VIP</strong></td>
+                  <td>Lamp5/Pax6 (single-bouquet-like)</td>
+                  <td>Irregular/adapting spiking</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><strong>NOS1 (nNOS)</strong></td>
+                  <td>Long-range projecting Lamp5 cells</td>
+                  <td>Burst-spiking, long-range GABAergic projection</td>
+                </tr>
+              </tbody>
+            </table>
+            <h3>Key reasoning:</h3>
+            <ul>
+              <li><strong>Lamp5</strong> marks a subclass of CGE-derived (and some MGE-derived) GABAergic interneurons
+              </li>
+              <li>The <strong>Lamp5/Lhx6</strong> population is notable because it is MGE-derived (unlike most Lamp5
+                cells) and co-expresses <strong>SST</strong> - electrophysiologically it resembles chandelier cells
+              </li>
+              <li>The <strong>neurogliaform</strong> (Lamp5/Ndnf/<strong>NPY+</strong>) population is the canonical
+                Lamp5 type with a distinctive late-spiking phenotype and volume transmission of GABA</li>
+              <li><strong>nNOS+</strong> Lamp5 cells are a distinct long-range projecting population with burst-spiking
+                properties</li>
+              <li>Some subtypes co-express <strong>VIP</strong> or <strong>CCK</strong>, but VIP marks the more
+                electrophysiologically distinct group among these</li>
+            </ul>
+            <p>So the short answer: <strong>4</strong> electrophysiologically distinct neuropeptide-defined populations
+              would light up with a Lamp5 enhancer.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content">
+          <p><strong>13 distinct neuropeptide-defined populations</strong> would light up with a Lamp5 enhancer. A Lamp5
+            enhancer would label <strong>26 clusters</strong> spanning <strong>2 subclasses</strong> (Lamp5
+            Gaba, Lamp5 Lhx6 Gaba) and <strong>5 supertypes</strong>.
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content">Based on the transcriptomic taxonomy of the adult mouse brain (Allen Brain Cell Atlas;
+          Tasic et al. 2018; Gouwens et al. 2020; Yao et al. 2021, 2023), an enhancer targeting <b>Lamp5</b> would label
+          <b>~4 major electrophysiologically distinct populations</b>, distinguishable by their neuropeptide profiles:
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Bla bla</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 4 -->
+  <div class="question-block">
+    <div class="question-label">Question 4</div>
+    <div class="question-text">Consider the two parvalbuminergic subtypes Pvalb basket and Pvalb chandelier in the
+      primary somatosensory area S1 brain region. Do we expect one of the two cell types to be more frequently positive
+      to Pvalb or are they expected to have similar Pvalb positivity proportions?
+    </div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <h3>Evidence from the graph</h3>
+            <ul>
+              <li>In the Allen Brain Cell Atlas taxonomy encoded here, there are 2 chandelier clusters (732, 733) under
+                subclass <code>Pvalb chandelier Gaba</code> and 22 basket-type clusters (734-755) under subclass
+                <code>Pvalb Gaba</code>.
+              </li>
+              <li><strong>Pvalb is listed as a cluster-level differentiating marker (<code>Has_ct_marker</code>) for 1
+                  basket cluster (cluster:740) but for zero chandelier clusters.</strong> This signals that Pvalb
+                expression is high enough in some basket clusters to serve as a distinguishing marker at fine
+                resolution, but never reaches that status in chandelier cells.</li>
+              <li>The chandelier clusters instead carry distinct markers like <strong>Pthlh</strong>,
+                <strong>Krt12</strong>, and <strong>Sfta3-ps</strong> - known chandelier-specific genes - while
+                Pvalb itself is not among them.
+              </li>
+            </ul>
+            <h3>Biological reasoning</h3>
+            <ol>
+              <li>
+                <p><strong>Expression levels</strong>: Single-cell RNA-seq studies (including the Allen ABC Atlas
+                  underlying this graph) consistently show that Pvalb basket cells express <em>Pvalb</em> at
+                  <strong>higher average levels</strong> than chandelier cells. Chandelier cells have more variable,
+                  lower-magnitude Pvalb transcription.
+                </p>
+              </li>
+              <li>
+                <p><strong>Immunohistochemical detection</strong>: Because chandelier cells express Pvalb at lower
+                  levels, a substantial fraction fall <strong>below detection thresholds</strong> in standard anti-Pvalb
+                  immunostaining. Studies in mouse somatosensory cortex have shown that many morphologically confirmed
+                  chandelier cells are Pvalb-immunonegative, while basket cells are more uniformly Pvalb-positive.</p>
+              </li>
+              <li>
+                <p><strong>Developmental and functional context</strong>: Chandelier cells (axo-axonic cells) and basket
+                  cells arise from the medial ganglionic eminence but diverge in maturation. Basket cells upregulate
+                  Pvalb earlier and maintain higher steady-state levels, consistent with their higher firing rates and
+                  greater metabolic demand for calcium buffering. Chandelier cells, while still Pvalb-lineage, rely on
+                  additional markers (Pthlh, Vipr2) for their identity and have a more heterogeneous Pvalb expression
+                  profile.</p>
+              </li>
+            </ol>
+            <h3>Conclusion</h3>
+            <p>In S1 (primary somatosensory cortex), <strong>Pvalb basket cells should show a higher proportion of
+                Pvalb-positive cells</strong> compared to chandelier cells. Both types belong to the Pvalb family, but
+              chandelier cells express the gene at lower and more variable levels, leading to a lower &quot;positivity
+              rate&quot; - particularly when assessed by protein-level methods like immunohistochemistry.</p>
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>Although both subtypes are classified under the Pvalb transcriptomic class, they differ meaningfully in
+              their parvalbumin expression levels:</p>
+            <p><strong>Pvalb basket cells:</strong></p>
+            <ul>
+              <li>Express Pvalb at consistently high levels - it is one of their most robust and defining markers.
+              </li>
+              <li>Virtually all basket cells are detectably Pvalb-positive regardless of assay (scRNA-seq, FISH, IHC).
+              </li>
+            </ul>
+            <p><strong>Pvalb chandelier cells:</strong></p>
+            <ul>
+              <li>Express Pvalb at <strong>lower and more variable</strong> levels compared to basket cells.</li>
+              <li>Single-cell transcriptomic studies (including Allen Brain Cell Atlas data) consistently show that
+                chandelier cells sit at the lower end of the Pvalb expression distribution within the broader Pvalb
+                class.</li>
+              <li>A non-trivial fraction of chandelier cells can fall below detection thresholds, particularly in less
+                sensitive assays, reducing their apparent Pvalb-positivity rate.</li>
+            </ul>
+            <h3>Why the difference?</h3>
+            <ol>
+              <li>
+                <p><strong>Distinct transcriptomic identity.</strong> Chandelier cells occupy a separate transcriptomic
+                  branch from basket cells. While both derive from the medial ganglionic eminence and share core
+                  PV-interneuron features, chandelier cells have a divergent gene-regulatory program that results in
+                  lower baseline Pvalb transcription.</p>
+              </li>
+              <li>
+                <p><strong>Functional correlate.</strong> Basket cells are the canonical fast-spiking perisomatic
+                  inhibitors with very high metabolic demands, and Pvalb (a calcium buffer) is tightly coupled to that
+                  physiology. Chandelier cells, which target the axon initial segment, have a partially different
+                  electrophysiological and metabolic profile, consistent with somewhat lower calcium-buffering
+                  requirements.</p>
+              </li>
+              <li>
+                <p><strong>Empirical evidence.</strong> Patch-seq and MERFISH datasets from mouse cortex (including S1)
+                  show that Pvalb transcript counts are systematically lower in chandelier-mapped clusters compared to
+                  basket-mapped clusters.</p>
+              </li>
+            </ol>
+            <h3>Summary</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Pvalb Basket</th>
+                  <th>Pvalb Chandelier</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Pvalb expression level</td>
+                  <td>High, consistent</td>
+                  <td>Lower, variable</td>
+                </tr>
+                <tr>
+                  <td>Expected Pvalb positivity</td>
+                  <td>~Near 100%</td>
+                  <td>Appreciably lower</td>
+                </tr>
+                <tr>
+                  <td>Relative abundance in S1</td>
+                  <td>More common</td>
+                  <td>Rare</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Bottom line:</strong> We expect Pvalb basket cells to show a meaningfully higher Pvalb-positivity
+              proportion than chandelier cells in S1, driven by intrinsic differences in transcriptional regulation of
+              the <em>Pvalb</em> gene between these two subtypes.</p>
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content">Pvalb basket cells are expected to have higher Pvalb positivity proportions than Pvalb
+          chandelier cells.
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Response</div>
+        <div class="cell-content">Pvalb basket cells are expected to have a higher Pvalb-positivity proportion than
+          Pvalb chandelier cells.
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Bla bla</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.show-toggle').forEach(toggle => {
+      const body = toggle.previousElementSibling;
+      toggle.addEventListener('click', () => {
+        const isCollapsed = body.classList.contains('collapsed');
+        body.classList.toggle('collapsed', !isCollapsed);
+        toggle.textContent = isCollapsed ? 'show less' : 'show more';
+      });
+    });
+  </script>
+
+</body>
+
+</html>
