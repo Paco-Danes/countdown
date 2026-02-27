@@ -504,12 +504,12 @@
       <div class="divider-row"></div>
 
       <div class="cell kg">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content"><b>β2-tanycytes</b> (Tanycyte NN_3) and <b>β1-tanycytes</b> would show the strongest
           increase in immune programs during aging.</div>
       </div>
       <div class="cell plain">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content">
           <p>The answer centers on <strong>β2 tanycytes</strong>, with <strong>β1 tanycytes</strong> as a secondary
             candidate.</p>
@@ -571,7 +571,7 @@
             <p><strong>Dysf is a ct_marker for exactly ONE cluster in the entire database</strong> - cluster 799. No
               other Sst cluster, and in fact no other cluster of any type, carries Dysf as a marker.</p>
             <p><strong>Step 3 - Proposed targeting strategy:</strong>
-              An intersectional genetic approach using <strong>Sst-Cre ├ù Dysf-Flp</strong> (or equivalent
+              An intersectional genetic approach using <strong>Sst-Cre × Dysf-Flp</strong> (or equivalent
               dual-recombinase system) would:</p>
             <ul>
               <li>Restrict labeling to Sst+ cells (eliminating all non-interneuron expression)</li>
@@ -722,11 +722,11 @@
       <div class="divider-row"></div>
 
       <div class="cell kg">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content">Answer: <b>Dysf</b> (Dysferlin)</div>
       </div>
       <div class="cell plain">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content"><b>Hpse</b> (heparanase) is the gene you should target in an intersectional strategy
           with Sst.</div>
       </div>
@@ -936,7 +936,7 @@
       <div class="divider-row"></div>
 
       <div class="cell kg">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content">
           <p><strong>13 distinct neuropeptide-defined populations</strong> would light up with a Lamp5 enhancer. A Lamp5
             enhancer would label <strong>26 clusters</strong> spanning <strong>2 subclasses</strong> (Lamp5
@@ -944,7 +944,7 @@
         </div>
       </div>
       <div class="cell plain">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content">Based on the transcriptomic taxonomy of the adult mouse brain (Allen Brain Cell Atlas;
           Tasic et al. 2018; Gouwens et al. 2020; Yao et al. 2021, 2023), an enhancer targeting <b>Lamp5</b> would label
           <b>~4 major electrophysiologically distinct populations</b>, distinguishable by their neuropeptide profiles:
@@ -1104,13 +1104,13 @@
       <div class="divider-row"></div>
 
       <div class="cell kg">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content">Pvalb basket cells are expected to have higher Pvalb positivity proportions than Pvalb
           chandelier cells.
         </div>
       </div>
       <div class="cell plain">
-        <div class="cell-section-label">Response</div>
+        <div class="cell-section-label">Answer</div>
         <div class="cell-content">Pvalb basket cells are expected to have a higher Pvalb-positivity proportion than
           Pvalb chandelier cells.
         </div>
@@ -1123,6 +1123,1060 @@
     </div>
   </div>
 
+
+  <!-- QUESTION 5 -->
+  <div class="question-block">
+    <div class="question-label">Question 5</div>
+    <div class="question-text">Which neuropeptide is expressed by cortex cells that would light up if I were to
+      genetically target the striatal cholinergic neurons?</div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>Now I have a clear picture. Let me synthesize the reasoning.</p>
+            <h3>1. Striatal cholinergic neurons and their genetic targeting</h3>
+            <p>The striatal cholinergic interneurons (clusters 923-932, &quot;PAL-STR Gaba-Chol&quot;) are canonically
+              targeted using a <strong>Chat-Cre</strong> driver line. All 6 clusters express Chat as a neurotransmitter
+              marker, along with Slc18a3 (VAChT) and Slc5a7 (high-affinity choline transporter).</p>
+            <h3>2. Which cortical cells express the cholinergic machinery?</h3>
+            <p>A Chat-Cre line drives recombination in <strong>all Chat-expressing cells</strong>, not just striatal
+              ones. In the cortex, the cells that express cholinergic genes are the <strong>Sst Chodl
+                interneurons</strong> - the long-range projecting GABAergic neurons. The database confirms this:
+              cluster 859 (Sst Chodl Gaba_4, observed in Isocortex) carries <strong>Slc5a7</strong> as a cell-type
+              marker, directly linking it to the cholinergic molecular program. These neurons are well-documented in the
+              literature to express Chat at low levels and are reliably labeled in Chat-Cre mice.</p>
+            <h3>3. Neuropeptides of cortical Sst Chodl neurons</h3>
+            <p>The two cortical Sst Chodl clusters (858, 859) express:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Neuropeptide</th>
+                  <th>Cluster 858</th>
+                  <th>Cluster 859</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Sst</strong></td>
+                  <td>yes</td>
+                  <td>yes</td>
+                </tr>
+                <tr>
+                  <td><strong>Npy</strong></td>
+                  <td>yes</td>
+                  <td>yes</td>
+                </tr>
+                <tr>
+                  <td><strong>Cort</strong> (cortistatin)</td>
+                  <td>yes</td>
+                  <td>yes</td>
+                </tr>
+                <tr>
+                  <td>Pdyn</td>
+                  <td>yes</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>Penk</td>
+                  <td>-</td>
+                  <td>yes</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Sst</strong> and <strong>Npy</strong> are the most consistent neuropeptide markers across the
+              entire Sst Chodl family (Sst in 18/18 clusters, Npy in 16/18). <strong>Cort</strong> (cortistatin,
+              structurally related to somatostatin) is shared by both cortical clusters and adds specificity.</p>
+            <h3>Bottom line</h3>
+            <p>If you use a Chat-Cre line to target striatal cholinergic interneurons, the cortical cells that
+              &quot;light up&quot; as off-target labeling are the <strong>Sst/Chodl long-range projecting
+                interneurons</strong>, and their defining neuropeptide is <strong>somatostatin (Sst)</strong>, with
+              <strong>Npy</strong> and <strong>cortistatin (Cort)</strong> as co-expressed neuropeptides.
+            </p>
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <h3>Step 1 - Identify the genetic tool</h3>
+            <p>Striatal cholinergic interneurons (ChINs) are universally targeted using a <strong>ChAT-Cre</strong>
+              (choline acetyltransferase promoter-driven Cre) driver line. There is no striatum-restricted cholinergic
+              Cre line in common use, so a ChAT-Cre × reporter cross labels <strong>all</strong> ChAT-expressing
+              neurons throughout the brain.</p>
+            <h3>Step 2 - Which cortical cells also express ChAT?</h3>
+            <p>The cortex contains a sparse population of <strong>ChAT-positive interneurons</strong>. These are
+              GABAergic interneurons that co-release acetylcholine and would be labeled (&quot;light up&quot;) by any
+              ChAT-Cre-driven reporter, even though the experiment was designed to target the striatum.</p>
+            <h3>Step 3 - What neuropeptide do cortical ChAT⁺ interneurons express?</h3>
+            <p>Cortical ChAT⁺ interneurons are a well-characterized subset of <strong>VIP-expressing (VIP⁺)
+                interneurons</strong>. This co-expression has been confirmed by single-cell RNA-seq (e.g., the Allen
+              Brain Cell Atlas), ISH, and electrophysiological studies. They belong to the CGE-derived, bipolar/bitufted
+              VIP+ class of cortical GABAergic interneurons.</p>
+            <h3>Summary</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Reasoning step</th>
+                  <th>Entity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Striatal cholinergic neuron marker</td>
+                  <td><em>Chat</em> (ChAT-Cre)</td>
+                </tr>
+                <tr>
+                  <td>Off-target cortical labeling</td>
+                  <td>Cortical ChAT⁺ interneurons</td>
+                </tr>
+                <tr>
+                  <td>Neuropeptide co-expressed</td>
+                  <td><strong>VIP</strong></td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The neuropeptide is <strong>VIP (vasoactive intestinal peptide)</strong>.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          <p>The neuropeptides are Sst (somatostatin) and Npy (neuropeptide Y), with Cort (cortistatin) as a
+            notable additional marker.</p>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">VIP (Vasoactive Intestinal Peptide)
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Bla bla</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 6 -->
+  <div class="question-block">
+    <div class="question-label">Question 6</div>
+    <div class="question-text">
+      The arcuate Otp+/Npy+ neurons are part of the well-known energy homeostasis circuit and show a strong
+      transcriptomic change with healthy ageing. Based on this info, which non-telencephalic region is also supposed to
+      change with healthy ageing?
+    </div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p><strong>Step 1 - Identifying the neurons.</strong> The arcuate Otp+/Npy+ neurons correspond to clusters
+              1837ÔÇô1838 (<code>TU-ARH Otp Six6 Gaba_1</code>), which co-express <strong>Agrp + Npy</strong> (and
+              Cartpt in 1837). These are the canonical <strong>AgRP/NPY orexigenic neurons</strong> of the arcuate
+              nucleus - the hunger-promoting arm of the energy homeostasis circuit.</p>
+            <p><strong>Step 2 - The circuit.</strong> The &quot;well-known energy homeostasis circuit&quot; centered
+              on these neurons is the <strong>ARH ÔåÆ PVH melanocortin circuit</strong>:</p>
+            <ul>
+              <li>ARH AgRP/NPY neurons project to the PVH, where AgRP antagonizes MC4R and NPY acts on Y1/Y5 receptors
+                to promote feeding</li>
+              <li>The opposing arm (ARH POMC/CART neurons) activates MC4R in PVH to suppress feeding</li>
+              <li>The PVH integrates these signals and controls energy expenditure and feeding behavior via descending
+                projections to brainstem autonomic centers (NTS, DMX)</li>
+            </ul>
+            <p>The database confirms PVH contains Otp+ glutamatergic clusters (PVH-SO-PVa Otp Glut series) expressing
+              key neuroendocrine peptides (CRH, TRH, AVP, OXT) - the downstream effector neurons of this circuit.</p>
+            <p><strong>Step 3 - Why PVH should also change with ageing.</strong> If presynaptic ARH AgRP/NPY neurons
+              undergo strong transcriptomic changes with healthy ageing (altered neuropeptide expression, receptor
+              levels, signaling molecules), the PVH neurons they innervate would be expected to show corresponding
+              changes through:</p>
+            <ul>
+              <li>Altered synaptic input and trans-synaptic signaling</li>
+              <li>Compensatory receptor regulation (MC4R, Y1R)</li>
+              <li>Downstream neuroendocrine adjustments (CRH, TRH axes)</li>
+            </ul>
+            <h3>Plausibility ranking</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Region</th>
+                  <th>Rationale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>1</strong></td>
+                  <td><strong>PVH</strong> (Paraventricular hypothalamic nucleus)</td>
+                  <td>Primary and most direct target of ARH AgRP/NPY neurons; core node of the melanocortin energy
+                    circuit</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>NTS (Nucleus of the solitary tract)</td>
+                  <td>Brainstem node of the energy circuit, receives descending PVH projections and vagal satiety
+                    signals</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>LHA (Lateral hypothalamic area)</td>
+                  <td>Secondary ARH projection target (orexin/MCH neurons), but less central to the
+                    &quot;well-known&quot; circuit</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Data-supported</strong>: The ARH clusters 1837/1838 are AgRP/NPY/GABA neurons; PVH clusters are
+              Otp+ glutamatergic neurons with CRH/TRH - both confirmed in the graph.</p>
+            <p><strong>Mechanistic inference</strong>: Circuit-level coupling predicts that transcriptomic ageing
+              changes in ARH neurons propagate to their primary postsynaptic target, the PVH.</p>
+            <p><strong>Remaining uncertainty</strong>: The database does not contain direct projection or ageing data,
+              so the PVH prediction rests on canonical circuit knowledge rather than graph-internal evidence.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <h3>1. The Circuit</h3>
+            <p>The arcuate <strong>Otp+/Npy+</strong> neurons are the canonical <strong>NPY/AgRP orexigenic</strong>
+              population. The &quot;well-known energy homeostasis circuit&quot; they participate in is the
+              <strong>melanocortin pathway</strong>, whose primary downstream target is the <strong>paraventricular
+                hypothalamic nucleus (PVH)</strong>.
+            </p>
+            <p>ARC (NPY/AgRP &amp; POMC) <strong>ÔåÆ</strong> PVH <strong>ÔåÆ</strong> regulation of food intake,
+              energy expenditure, and neuroendocrine output</p>
+            <h3>2. The Otp Link</h3>
+            <p>This is the critical clue. <strong>Otp (Orthopedia)</strong> is a homeodomain transcription factor that
+              specifies neuronal identity during development in both the ARC and the PVH. Otp-lineage neurons populate
+              both nuclei, meaning they share a developmental program. If Otp+ neurons in the ARC show strong
+              transcriptomic drift with healthy ageing, their developmentally related Otp+ counterparts in the
+              <strong>PVH</strong> - which are their direct synaptic partners - would be predicted to show
+              correlated ageing-related transcriptomic changes as well.
+            </p>
+            <h3>3. Why PVH Specifically</h3>
+            <ul>
+              <li><strong>Non-telencephalic</strong>: PVH is diencephalic (hypothalamus) - satisfies the constraint.
+              </li>
+              <li><strong>Shared Otp developmental origin</strong> with ARC neurons.</li>
+              <li><strong>Direct synaptic target</strong> of ARC NPY neurons in the energy homeostasis circuit.</li>
+              <li>PVH integrates the orexigenic (NPY/AgRP) and anorexigenic (POMC/CART) signals from the ARC and
+                translates them into neuroendocrine and autonomic outputs (e.g., CRH, TRH, oxytocin, vasopressin
+                release).</li>
+            </ul>
+            <h3>Summary</h3>
+            <p>If arcuate Otp+/Npy+ neurons change transcriptomically with ageing, the <strong>PVH</strong> - their
+              primary circuit partner and developmental sibling via shared Otp lineage - is the non-telencephalic
+              region predicted to also change with healthy ageing.</p>
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          The non-telencephalic region expected to also change with healthy ageing is the <b>Paraventricular
+            hypothalamic nucleus (PVH)</b>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          The Paraventricular Nucleus of the Hypothalamus (PVH)
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Both wrong, ground truth was Nucleus Incertus (NI). With a follow up asking about NI
+          as possible candidate they both changed their responses accordingly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 7 -->
+  <div class="question-block">
+    <div class="question-label">Question 7</div>
+    <div class="question-text">Which anatomical division in the adult mouse brain is the most heterogenous in terms of
+      cell type composition?</div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <ul>
+              <li>It hosts <strong>719 distinct cell type clusters</strong> (second only to Midbrain in raw count)</li>
+              <li>It spans <strong>16 Classes</strong> and <strong>8 Neighborhoods</strong> - the highest diversity at
+                both coarse levels among all regions</li>
+            </ul>
+            <p>While the <strong>Midbrain (MB)</strong> has slightly more clusters (746), its diversity collapses into
+              only 5 Neighborhoods compared to the Hypothalamus&#39;s 8, meaning many of those Midbrain clusters are
+              variations within fewer broad cell categories.</p>
+            <p>The Hypothalamus&#39;s exceptional heterogeneity reflects its role as a hub integrating endocrine,
+              autonomic, and behavioral functions - requiring a uniquely diverse repertoire of neuronal and
+              non-neuronal cell types.</p>
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>Based on large-scale single-cell and spatial transcriptomic atlases (Allen Brain Cell Atlas, BICCN), the
+              <strong>cerebral cortex</strong> - and more broadly the <strong>telencephalon/cerebrum</strong> -
+              harbors the greatest cell-type heterogeneity in the adult mouse brain. Here&#39;s the reasoning:
+            </p>
+            <h3>Why the cerebral cortex wins in absolute diversity</h3>
+            <ul>
+              <li><strong>Glutamatergic neurons</strong>: Dozens of layer-specific (L2/3, L4, L5, L6) and area-specific
+                (e.g., visual vs. motor vs. prefrontal) excitatory subtypes, creating a combinatorial explosion of
+                identities across the cortical sheet.</li>
+              <li><strong>GABAergic interneurons</strong>: All major cardinal classes - <strong>Pvalb</strong>,
+                <strong>Sst</strong>, <strong>Vip</strong>, <strong>Lamp5</strong>, <strong>Sncg</strong> - each with
+                multiple molecularly distinct subtypes, many shared across areas.
+              </li>
+              <li><strong>Glia</strong>: Full complement of astrocytes, oligodendrocytes, OPCs, and microglia, with
+                regional specialization.</li>
+              <li><strong>Hippocampal formation</strong> adds further unique types (e.g., CA1/CA3 pyramidal subtypes,
+                dentate granule cells).</li>
+            </ul>
+            <h3>Notable runner-up: The Hypothalamus</h3>
+            <p>The <strong>hypothalamus</strong> deserves special mention. Per unit volume, it may be the <em>most
+                diverse</em> region, with hundreds of neuron types defined by combinatorial expression of:</p>
+            <ul>
+              <li>Neuropeptides (Avp, Oxt, Crh, Agrp, Pomc, Hcrt, etc.)</li>
+              <li>Transcription factors (Nr5a1, Sim1, Otp, etc.)</li>
+              <li>Mixed neurotransmitter identities (glutamatergic, GABAergic, and co-releasing)</li>
+            </ul>
+            <h3>Summary</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Division</th>
+                  <th>Absolute # of cell types</th>
+                  <th>Diversity per volume</th>
+                  <th>Key driver</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Cerebral cortex</strong></td>
+                  <td><strong>Highest</strong></td>
+                  <td>High</td>
+                  <td>Layer ├ù area ├ù class combinatorics</td>
+                </tr>
+                <tr>
+                  <td><strong>Hypothalamus</strong></td>
+                  <td>Very high</td>
+                  <td><strong>Highest</strong></td>
+                  <td>Neuropeptide/TF combinatorics</td>
+                </tr>
+                <tr>
+                  <td>Cerebral nuclei</td>
+                  <td>Moderate</td>
+                  <td>Moderate</td>
+                  <td>Striatal/pallidal specialization</td>
+                </tr>
+                <tr>
+                  <td>Thalamus</td>
+                  <td>Moderate</td>
+                  <td>Moderate</td>
+                  <td>Nucleus-specific types</td>
+                </tr>
+                <tr>
+                  <td>Midbrain/Hindbrain</td>
+                  <td>Moderate</td>
+                  <td>Moderate</td>
+                  <td>Neuromodulatory diversity</td>
+                </tr>
+                <tr>
+                  <td>Cerebellum</td>
+                  <td>Low</td>
+                  <td>Low</td>
+                  <td>Dominated by granule cells</td>
+                </tr>
+              </tbody>
+            </table>
+            <b>Bottom line</b>: The <b>cerebral cortex (isocortex)</b> is the most heterogeneous in total
+            cell-type composition, driven by the intersection of laminar, areal, and interneuron diversity. If the
+            question is about <em>neuronal subtype density</em>, the <b>hypothalamus</b> is a strong contender.
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          The <b>Hypothalamus (HY)</b> stands out as the most heterogeneous anatomical division in terms of cell type
+          composition.
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">Most Heterogeneous Anatomical Division: <b>The Cerebral Cortex</b> (Isocortex +
+          Allocortex).
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Ground truth: Hypothalamus (and midbrain as runner up). Opus-KG cited both</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 8 -->
+  <div class="question-block">
+    <div class="question-label">Question 8</div>
+    <div class="question-text">Which brain anatomical division in the adult mouse brain is the most chemically diverse
+      in how its neurons communicate through neurotransmitters?</div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed"> Out of 8 total neurotransmitter types in the database (Chol, Dopa,
+            GABA, Glut, Glyc, Hist, Nora, Sero), the Pons hosts clusters using 7 of them — every neurotransmitter except
+            Histamine. It shares this distinction with two of its sub-nuclei (Laterodorsal tegmental nucleus and Pontine
+            central gray).</p>
+            <p> The Pons neurotransmitter breakdown across its 386 clusters:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Neurotransmitter</th>
+                  <th>Clusters</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>GABA</td>
+                  <td>171</td>
+                </tr>
+                <tr>
+                  <td>Glutamate</td>
+                  <td>167</td>
+                </tr>
+                <tr>
+                  <td>Glycine</td>
+                  <td>69</td>
+                </tr>
+                <tr>
+                  <td>Serotonin</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>Acetylcholine</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>Dopamine</td>
+                  <td>2</td>
+                </tr>
+                <tr>
+                  <td>Noradrenaline</td>
+                  <td>1</td>
+                </tr>
+              </tbody>
+            </table>
+            <p> This chemical diversity reflects the Pons&#39;s role as a brainstem relay station integrating motor,
+              sensory, autonomic, and modulatory functions — requiring the full spectrum of
+              classical neurotransmitter systems.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>Here&#39;s the systematic reasoning:</p>
+            <h3>Why the hypothalamus wins</h3>
+            <p><strong>1. Neurotransmitter multiplexing</strong>
+              Hypothalamic neurons routinely co-release multiple classical neurotransmitters - many nuclei contain
+              neurons that are simultaneously glutamatergic and GABAergic, or switch transmitter identity in a
+              state-dependent manner. This degree of co-transmission is unmatched elsewhere.</p>
+            <p><strong>2. Neuropeptide diversity</strong>
+              The hypothalamus expresses the largest repertoire of neuropeptides of any brain region, including:</p>
+            <ul>
+              <li><strong>Feeding/metabolism</strong>: Agrp, Npy, Pomc, Cart, Hcrt/Orexin, Mch, Ghrh</li>
+              <li><strong>Stress/HPA axis</strong>: Crh, Avp, Oxt</li>
+              <li><strong>Reproduction</strong>: GnRH, Kisspeptin (Kiss1), Tac2</li>
+              <li><strong>Thermoregulation/sleep</strong>: Galanin (Gal), Pacap, Vip, Prok2</li>
+              <li><strong>Social behavior</strong>: Oxytocin, Vasopressin</li>
+            </ul>
+            <p>Many single neurons express <strong>3ÔÇô5+ neuropeptides simultaneously</strong>, creating a
+              combinatorial chemical code far richer than classical neurotransmitter identity alone.</p>
+            <p><strong>3. Monoamine and other small-molecule signals</strong>
+              The hypothalamus contains or receives dense input from <strong>histaminergic</strong> (tuberomammillary
+              nucleus - the sole source of brain histamine), <strong>dopaminergic</strong> (tuberoinfundibular,
+              A11ÔÇôA14 groups), and <strong>serotonin-sensitive</strong> populations.</p>
+            <p><strong>4. Neurohormonal signaling</strong>
+              Uniquely, hypothalamic neurons also function as <strong>neuroendocrine cells</strong>, releasing peptides
+              directly into the portal vasculature and bloodstream - a chemical communication modality absent from
+              other divisions.</p>
+            <h3>Comparison across divisions</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Division</th>
+                  <th>Classical NTs</th>
+                  <th>Neuropeptide diversity</th>
+                  <th>Co-transmission</th>
+                  <th>Neurohormonal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Hypothalamus</strong></td>
+                  <td><strong>Glu + GABA + mixed</strong></td>
+                  <td><strong>Highest (~50+ peptides)</strong></td>
+                  <td><strong>Extensive</strong></td>
+                  <td><strong>Yes</strong></td>
+                </tr>
+                <tr>
+                  <td>Midbrain/Hindbrain</td>
+                  <td>Glu, GABA, DA, 5-HT, NE</td>
+                  <td>Moderate</td>
+                  <td>Moderate</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Cerebral cortex</td>
+                  <td>Glu, GABA</td>
+                  <td>LowÔÇômoderate</td>
+                  <td>Limited</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Thalamus</td>
+                  <td>Glu, GABA</td>
+                  <td>Low</td>
+                  <td>Minimal</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Cerebellum</td>
+                  <td>Glu, GABA</td>
+                  <td>Very low</td>
+                  <td>Minimal</td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td>Cerebral nuclei</td>
+                  <td>Glu, GABA, ACh, DA</td>
+                  <td>Moderate</td>
+                  <td>Moderate</td>
+                  <td>No</td>
+                </tr>
+              </tbody>
+            </table>
+            <h3>Key distinction from the previous question</h3>
+            <p>The cerebral cortex wins on <strong>cell-type heterogeneity</strong> (driven by laminar/areal
+              combinatorics), but its neurons communicate through a relatively narrow chemical palette (primarily
+              glutamate and GABA). The hypothalamus, by contrast, achieves its diversity through <strong>chemical
+                identity</strong> - the sheer number of distinct signaling molecules deployed per neuron and per
+              nucleus is unparalleled.</p>
+            <p><strong>Bottom line</strong>: The <strong>hypothalamus</strong> is the most chemically diverse division,
+              uniquely combining classical neurotransmitters, extensive co-transmission, the brain&#39;s richest
+              neuropeptide repertoire, and neuroendocrine signaling into the vasculature.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          The Pons (P) is the most chemically diverse brain division in terms of neurotransmitter communication.
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          The <b>Hypothalamus</b> is the most chemically diverse brain division in terms of neurotransmitter and
+          neuromodulatory signaling.
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">ground truth: Brainstem -> Pons and Midbrain</div>
+      </div>
+    </div>
+  </div>
+  <!-- QUESTION 9 -->
+  <div class="question-block">
+    <div class="question-label">Question 9</div>
+    <div class="question-text">
+      Which single neuropeptide is expressed most frequently across all rare-transmitter neuron clusters, and which
+      brain regions contain it?
+    </div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p><strong>Rare-transmitter clusters</strong> (neurotransmitter associated with &lt;200 clusters): Histamine
+              (5), Noradrenaline (12), Serotonin (20), Acetylcholine (48), and Dopamine (67) - totaling 152 clusters.
+            </p>
+            <p>Adcyap1 expression spans all rare transmitter systems except histamine:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Neurotransmitter</th>
+                  <th>Clusters with Adcyap1</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Dopamine</td>
+                  <td>21</td>
+                </tr>
+                <tr>
+                  <td>Cholinergic</td>
+                  <td>13</td>
+                </tr>
+                <tr>
+                  <td>Serotonin</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>Noradrenaline</td>
+                  <td>5</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Key brain regions</strong> harboring these Adcyap1+ rare-transmitter clusters:</p>
+            <ul>
+              <li><strong>Midbrain</strong> (MB) - 17 clusters, dominated by dopaminergic VTA/SN neurons</li>
+              <li><strong>Ventral tegmental area</strong> (VTA) - 10 clusters</li>
+              <li><strong>Raphe nuclei</strong> (IF, CLI, DR, RL) - serotonergic hubs</li>
+              <li><strong>Pons</strong> (P) - 7 clusters, including noradrenergic locus coeruleus projections</li>
+              <li><strong>Hypothalamus</strong> (HY, SUM, PH) - mixed modulatory populations</li>
+              <li><strong>Brainstem visceral nuclei</strong> (NTS, DMX, PB) - cholinergic/noradrenergic autonomic
+                centers</li>
+              <li><strong>Interpeduncular nucleus</strong> (IPA, IPDM, IPDL) - habenulo-interpeduncular circuit</li>
+            </ul>
+            <p>This is biologically coherent: PACAP is a pleiotropic neuropeptide with well-established roles in stress
+              responses, autonomic regulation, and neuromodulation. It is broadly co-expressed in monoaminergic and
+              cholinergic systems throughout the brainstem and midbrain - precisely the cell populations that define
+              the rare-transmitter landscape.</p>
+            <h2>Doubts</h2>
+            <ul>
+              <li>Histamine clusters (only 5) express no Adcyap1, but the sample is very small and histaminergic neurons
+                in the tuberomammillary nucleus have been reported to co-express PACAP in some studies, so absence here
+                may reflect detection thresholds rather than true biology.</li>
+              <li>The <code>Has_np_marker</code> relationship captures statistically enriched markers, so Adcyap1 may be
+                expressed at low levels in additional clusters not captured by this edge type.</li>
+            </ul>
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <h3>Why Galanin?</h3>
+            <p>Rare-transmitter neurons - those using transmitters other than glutamate or GABA (cholinergic,
+              serotonergic, dopaminergic, noradrenergic, histaminergic) - are scattered across the brain. <em>Gal</em>
+              uniquely co-occurs with multiple rare-transmitter systems:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Rare-transmitter system</th>
+                  <th>Key marker</th>
+                  <th><em>Gal</em> co-expression</th>
+                  <th>Brain region</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Noradrenergic</strong></td>
+                  <td><em>Dbh</em> / <em>Th</em></td>
+                  <td>Strong</td>
+                  <td>Locus coeruleus (pons)</td>
+                </tr>
+                <tr>
+                  <td><strong>Cholinergic</strong></td>
+                  <td><em>Chat</em></td>
+                  <td>Strong</td>
+                  <td>Basal forebrain (medial septum, diagonal band)</td>
+                </tr>
+                <tr>
+                  <td><strong>Histaminergic</strong></td>
+                  <td><em>Hdc</em></td>
+                  <td>Present</td>
+                  <td>Tuberomammillary nucleus (hypothalamus)</td>
+                </tr>
+                <tr>
+                  <td><strong>Serotonergic</strong></td>
+                  <td><em>Tph2</em> / <em>Slc6a4</em></td>
+                  <td>Subset</td>
+                  <td>Dorsal raphe (midbrain)</td>
+                </tr>
+                <tr>
+                  <td><strong>Hypothalamic neuroendocrine</strong></td>
+                  <td>Various</td>
+                  <td>Widespread</td>
+                  <td>Arcuate, MPOA, lateral hypothalamus</td>
+                </tr>
+              </tbody>
+            </table>
+            <h3>Brain regions containing Galanin-expressing rare-transmitter neurons</h3>
+            <ol>
+              <li><strong>Hypothalamus</strong> - tuberomammillary nucleus (histaminergic), arcuate/preoptic area
+                (neuroendocrine)</li>
+              <li><strong>Pons</strong> - locus coeruleus (noradrenergic)</li>
+              <li><strong>Basal forebrain</strong> - medial septum &amp; diagonal band of Broca (cholinergic)</li>
+              <li><strong>Midbrain</strong> - dorsal raphe nucleus (serotonergic subsets)</li>
+            </ol>
+            <h3>Biological rationale</h3>
+            <p>Galanin acts as a modulatory co-transmitter that fine-tunes the release and postsynaptic effects of the
+              primary transmitter. Its recurring presence across rare-transmitter systems reflects a conserved role in
+              <strong>gain control and homeostatic regulation</strong> - particularly in circuits governing arousal,
+              stress, feeding, and autonomic function, which are precisely the circuits where rare-transmitter neurons
+              concentrate.
+            </p>
+
+
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          <b>Adcyap1</b> (encoding the neuropeptide <b>PACAP</b> - Pituitary Adenylate Cyclase-Activating Polypeptide)
+          is the single neuropeptide most frequently expressed across rare-transmitter neuron clusters, present in <b>45
+            out of 152</b> such clusters.
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">
+          Answer: <b>Galanin</b> (Gal)
+          <b>Galanin</b> is the single neuropeptide expressed most frequently across rare-transmitter neuron clusters in
+          the adult mouse brain.
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Ground truth: Adcyap1 (PACAP)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION 10 -->
+  <div class="question-block">
+    <div class="question-label">Question 10</div>
+    <div class="question-text">
+      Which rare-transmitter neurons have the most exclusive neuropeptide signature (NPs found almost nowhere else)?
+    </div>
+    <div class="comparison-grid">
+      <div class="col-header kg">Opus KG-mcp</div>
+      <div class="col-header plain">Opus Plain</div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>The rare-transmitter clusters with the <strong>most exclusive neuropeptide signatures</strong> fall into
+              three distinct groups, ranked by exclusivity:</p>
+            <h3>1. Brainstem noradrenergic &amp; cholinergic clusters - <strong>Uts2b</strong> (3 clusters total in
+              the entire brain)</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th>Transmitter</th>
+                  <th>Subclass</th>
+                  <th>Key Regions</th>
+                  <th>NP signature</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>4548 NTS Dbh Glut_4</td>
+                  <td><strong>Nora</strong></td>
+                  <td>NTS Dbh Glut</td>
+                  <td>Barrington&#39;s nucleus, pontine tegmentum</td>
+                  <td>Uts2b, Pomc, Adcyap1, Gal, Calca</td>
+                </tr>
+                <tr>
+                  <td>4552 DMX VII Tbx20 Chol_1</td>
+                  <td><strong>Chol</strong></td>
+                  <td>DMX VII Tbx20 Chol</td>
+                  <td>DMX, NTS</td>
+                  <td>Uts2b, Pomc, Gal, Adcyap1</td>
+                </tr>
+                <tr>
+                  <td>4870 MY Lhx1 Gly-Gaba_1</td>
+                  <td><strong>Chol</strong></td>
+                  <td>MY Lhx1 Gly-Gaba</td>
+                  <td>Gigantocellular/magnocellular reticular</td>
+                  <td>Uts2b (sole NP)</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Uts2b</strong> (Urotensin-2B) is expressed in <strong>only 3 clusters in the entire
+                dataset</strong>, all of which are rare-transmitter neurons. This is 100% exclusivity - the most
+              exclusive neuropeptide signature of any group. These are autonomic-associated brainstem populations
+              (NTS-noradrenergic and vagal-cholinergic circuits).</p>
+            <h3>2. NTS noradrenergic cluster - <strong>Prlh</strong> (2 clusters total)</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th>Transmitter</th>
+                  <th>Key Regions</th>
+                  <th>NP signature</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>4535 NTS Dbh Glut_2</td>
+                  <td><strong>Nora</strong></td>
+                  <td>NTS, Medulla</td>
+                  <td><strong>Prlh</strong>, Pomc, Cartpt</td>
+                </tr>
+              </tbody>
+            </table>
+            <p><strong>Prlh</strong> (Prolactin-Releasing Hormone) exists in only 2 clusters brain-wide. This NTS
+              noradrenergic neuron co-expresses Pomc and Cartpt - a signature consistent with <strong>A2/C2
+                catecholaminergic</strong> neurons involved in satiety signaling and stress-related autonomic
+              regulation.</p>
+            <h3>3. Midbrain dopaminergic clusters - <strong>Npw</strong> (5 clusters total, 4 are rare-transmitter)
+            </h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th>Transmitter</th>
+                  <th>Key Regions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>3845 SNc-VTA-RAmb Foxa1 Dopa_2</td>
+                  <td><strong>Dopa</strong></td>
+                  <td>VTA, CLI, supramammillary</td>
+                </tr>
+                <tr>
+                  <td>3861 SNc-VTA-RAmb Foxa1 Dopa_4</td>
+                  <td><strong>Dopa</strong></td>
+                  <td>Dorsal raphe, PAG</td>
+                </tr>
+                <tr>
+                  <td>3869 SNc-VTA-RAmb Foxa1 Dopa_5</td>
+                  <td><strong>Dopa</strong></td>
+                  <td>PAG, VTA</td>
+                </tr>
+                <tr>
+                  <td>3876 SNc-VTA-RAmb Foxa1 Dopa_7</td>
+                  <td><strong>Dopa</strong></td>
+                  <td>VTA, interfascicular raphe</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>All belong to the <strong>SNc-VTA-RAmb Foxa1 Dopa</strong> subclass. <strong>Npw</strong> (Neuropeptide
+              W) is expressed in only 5 clusters, of which 4 are these dopaminergic neurons. Npw+Cck co-expression marks
+              a molecularly distinct VTA dopamine subpopulation, potentially involved in reward modulation circuits
+              distinct from canonical VTA-DA neurons.</p>
+            <h3>Honorable mention: HB Calcb Chol - <strong>Calcb + Agrp</strong> combination</h3>
+            <p>Five <strong>hindbrain cholinergic</strong> motor-neuron clusters (cranial motor nuclei: trigeminal,
+              facial, abducens, oculomotor, hypoglossal, DMX) share the unusual combination of <strong>Calcb</strong>
+              (11 clusters total) and <strong>Agrp</strong> (24 clusters total). While neither NP is individually
+              ultra-rare, their co-expression in cholinergic motor neurons is highly distinctive - Agrp is classically
+              associated with hypothalamic hunger circuits, making its expression in brainstem motor neurons a notable
+              molecular curiosity.</p>
+            <h2>Explanation</h2>
+            <p>Exclusivity was measured as the fraction of all clusters expressing a given neuropeptide that belong to
+              rare-transmitter populations. The top-ranked neuropeptides (Uts2b, Prlh, Npw) are all concentrated in
+              <strong>brainstem autonomic/modulatory circuits</strong> - a theme consistent with the biology: rare
+              transmitter systems (noradrenaline, acetylcholine, dopamine) are themselves enriched in brainstem and
+              midbrain, and their most exclusive peptide co-transmitters tend to mark specialized functional
+              subpopulations within these systems (visceral control, stress, reward).
+            </p>
+            <h2>Doubts</h2>
+            <ul>
+              <li><strong>Uts2b</strong> in cluster 4870 (the sole NP) could reflect a marker detection artifact -
+                having only one neuropeptide may indicate low overall neuropeptide expression rather than a truly
+                exclusive signature.</li>
+              <li><strong>Agrp</strong> in cranial motor neurons (HB Calcb Chol) is unexpected. It could represent
+                ectopic low-level expression picked up by the marker algorithm, or a genuine non-canonical Agrp function
+                outside the arcuate nucleus. This warrants caution.</li>
+              <li>The exclusivity metric is sensitive to marker detection thresholds: a neuropeptide barely missing the
+                cutoff in glutamatergic/GABAergic clusters would appear artificially exclusive to rare-transmitter
+                populations.</li>
+            </ul>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Reasoning</div>
+        <div class="cell-content">
+          <div class="reasoning-body collapsed">
+            <p>These neurons possess the most exclusive neuropeptide signature among all rare-transmitter populations
+              - their defining neuropeptide combination is virtually absent from other cell types.</p>
+            <hr>
+            <h3>The exclusive signature</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Neuropeptide</th>
+                  <th>Found in HDC+ TMN neurons</th>
+                  <th>Found broadly elsewhere?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Hdc</strong> (histamine-synthesizing enzyme)</td>
+                  <td>Defining marker</td>
+                  <td>No - nearly unique to TMN</td>
+                </tr>
+                <tr>
+                  <td><strong>Penk</strong> (proenkephalin)</td>
+                  <td>Co-expressed</td>
+                  <td>Yes - widespread</td>
+                </tr>
+                <tr>
+                  <td><strong>Gal</strong> (galanin)</td>
+                  <td>Co-expressed</td>
+                  <td>Yes - widespread</td>
+                </tr>
+                <tr>
+                  <td><strong>Cartpt</strong> (CART)</td>
+                  <td>Subset</td>
+                  <td>Moderate - hypothalamus, VTA</td>
+                </tr>
+                <tr>
+                  <td><strong>Pmch</strong> (MCH)</td>
+                  <td>Neighboring but overlapping</td>
+                  <td>Narrow - lateral hypothalamus</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>The critical distinction: <strong>no other neuron cluster co-expresses <em>Hdc</em> + <em>Gal</em> +
+                <em>Penk</em> together</strong>. While individual peptides appear elsewhere, the combinatorial
+              signature is essentially private to this population.</p>
+            <hr>
+            <h3>Runners-up, ranked by exclusivity</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Rare-transmitter type</th>
+                  <th>Near-exclusive NP features</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>2</strong></td>
+                  <td><strong>Noradrenergic (LC)</strong></td>
+                  <td><em>Gal</em> + <em>Npy</em> + <em>Dbh</em> combination is highly restricted to the locus
+                    coeruleus; few other clusters share all three</td>
+                </tr>
+                <tr>
+                  <td><strong>3</strong></td>
+                  <td><strong>Serotonergic (dorsal raphe)</strong></td>
+                  <td>Subcluster-specific peptides like <em>Nps</em> (neuropeptide S) in some DRN subsets are quite
+                    rare, but serotonergic neurons overall share many NPs with hypothalamic populations</td>
+                </tr>
+                <tr>
+                  <td><strong>4</strong></td>
+                  <td><strong>Cholinergic (basal forebrain)</strong></td>
+                  <td>Least exclusive - <em>Gal</em>, <em>Penk</em>, <em>Tac1</em> are all broadly expressed in
+                    other systems</td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+            <h3>Why histaminergic neurons are so exclusive</h3>
+            <ol>
+              <li><strong>Tiny population</strong> - Only ~3,000ÔÇô4,000 HDC+ neurons exist in the entire mouse
+                brain, confined to the posterior hypothalamus (TMN / E2 mammillary region)</li>
+              <li><strong>Singular developmental origin</strong> - They derive from a narrow progenitor domain,
+                retaining a transcriptional program shared by no other mature neuron type</li>
+              <li><strong>Functional isolation</strong> - They serve as the sole source of neuronal histamine,
+                requiring a unique regulatory neuropeptide milieu for wake-promoting and metabolic functions</li>
+              <li><strong>Low transcriptomic diversity</strong> - Unlike serotonergic or cholinergic populations,
+                HDC+ neurons form very few subclusters, meaning their NP signature is highly conserved within the
+                group and divergent from everything outside it</li>
+            </ol>
+            <hr>
+            <h3>Key takeaway</h3>
+            <p>Exclusivity of neuropeptide signature scales inversely with population size and spatial distribution.
+              The TMN histaminergic neurons - small, spatially confined, developmentally distinct - sit at the
+              extreme end of this spectrum, making their neuropeptide fingerprint the most &quot;private&quot; among
+              rare-transmitter classes.</p>
+          </div>
+          <span class="show-toggle">show more</span>
+        </div>
+      </div>
+
+      <div class="divider-row"></div>
+
+      <div class="cell kg">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content">Brainstem <b>noradrenergic & cholinergic</b> clusters - Uts2b (3 clusters total in
+          the entire brain)
+        </div>
+      </div>
+      <div class="cell plain">
+        <div class="cell-section-label">Answer</div>
+        <div class="cell-content"><b>Histaminergic (HDC+) neurons</b> of the tuberomammillary nucleus
+        </div>
+      </div>
+
+      <div class="notes-row">
+        <div class="notes-label">Observations</div>
+        <div class="notes-content">Ground truth: Cholinergic neurons</div>
+      </div>
+    </div>
+  </div>
   <script>
     (function () {
       function closest(el, selector) {
